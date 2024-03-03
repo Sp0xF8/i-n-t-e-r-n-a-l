@@ -3,21 +3,39 @@
 #include <config.h>
 #include <draw.h>
 #include <gui.h>
+#include <data.h>
+
+// Vector3 WorldToScreen(const Vector3 vecOrigin, view_matrix_t matrix)
+// {
+    
+    
+//     float _w = matrix[3][0] * vecOrigin.x + matrix[3][1] * vecOrigin.y + matrix[3][2] * vecOrigin.z + matrix[3][3];
+
+// 	if (_w < 0.01f)
+// 		return { -1, -1, 0 };
+
+// 	float _x = matrix[0][0] * vecOrigin.x + matrix[0][1] * vecOrigin.y + matrix[0][2] * vecOrigin.z + matrix[0][3];
+// 	float _y = matrix[1][0] * vecOrigin.x + matrix[1][1] * vecOrigin.y + matrix[1][2] * vecOrigin.z + matrix[1][3];
 
 
+// 	_x = (gui::windowWidth / 2) * (1 + _x / _w);
+// 	_y = (gui::windowHeight / 2) * (1 - _y / _w);
 
+		
+
+//     return Vector3(_x, _y, _w);
+// }
 
 Vector3 WorldToScreen(const Vector3 vecOrigin, view_matrix_t matrix)
 {
     
-    
-    float _w = matrix[3][0] * vecOrigin.x + matrix[3][1] * vecOrigin.y + matrix[3][2] * vecOrigin.z + matrix[3][3];
+    float _w = matrix.matrix[3][0] * vecOrigin.x + matrix.matrix[3][1] * vecOrigin.y + matrix.matrix[3][2] * vecOrigin.z + matrix.matrix[3][3];
 
 	if (_w < 0.01f)
 		return { -1, -1, 0 };
 
-	float _x = matrix[0][0] * vecOrigin.x + matrix[0][1] * vecOrigin.y + matrix[0][2] * vecOrigin.z + matrix[0][3];
-	float _y = matrix[1][0] * vecOrigin.x + matrix[1][1] * vecOrigin.y + matrix[1][2] * vecOrigin.z + matrix[1][3];
+	float _x = matrix.matrix[0][0] * vecOrigin.x + matrix.matrix[0][1] * vecOrigin.y + matrix.matrix[0][2] * vecOrigin.z + matrix.matrix[0][3];
+	float _y = matrix.matrix[1][0] * vecOrigin.x + matrix.matrix[1][1] * vecOrigin.y + matrix.matrix[1][2] * vecOrigin.z + matrix.matrix[1][3];
 
 
 	_x = (gui::windowWidth / 2) * (1 + _x / _w);
@@ -26,12 +44,6 @@ Vector3 WorldToScreen(const Vector3 vecOrigin, view_matrix_t matrix)
 		
 
     return Vector3(_x, _y, _w);
-}
-
-
-
-namespace visuals {
-	view_matrix_t* viewMatrix = nullptr;
 }
 
 
@@ -45,42 +57,57 @@ void visuals::run(){
 	}
 
 	DLOG("Running visuals\n");
-
-
+	
+	DLOG("viewMatrix: %p\n", playerlist::viewMatrix);
+	DLOG("viewMatrix[0][0]: %f\n", playerlist::viewMatrix.matrix[0][0]);
+	
 	for (int i = 0; i < 32; i++) {
-		// DLOG("Running visuals for player %d\n", i);
+		DLOG("Running visuals for player %d\n", i);
 
+		DLOG("playerlist::players[i].controller: %p\n", playerlist::players[i].controller);
+		DLOG("playerlist::players[i].pawn: %p\n", playerlist::players[i].pawn);
+
+		DLOG("Player %d : %s\n", i, playerlist::players[i].Active() ? "active" : "inactive");
 		if (!playerlist::players[i].Active()) {
-			// DLOG("Player %d not active\n", i);
 			continue;
 		}
 
+
 		if(!config::visuals::drawTeam){
 			if(playerlist::players[i].controller->m_iTeamNum == playerlist::localPlayer.controller->m_iTeamNum){
+
+				DLOG("Player %d is on the same team\n", i);
 				continue;
+			} else {
+				DLOG("Player %d is on the other team\n", i);
 			}
 		}
 
+
+
 		if(playerlist::players[i].pawn == playerlist::localPlayer.pawn){
+			DLOG("Player %d is the local player\n", i);
 			continue;
 		}
 
 		if(playerlist::players[i].pawn->m_iHealth <= 0){
 			continue;
+		} else {
+			DLOG("Player %d is alive : %d\n", i, playerlist::players[i].pawn->m_iHealth);
 		}
 
 
-		if(config::visuals::esp::skeleton){
-			skeleton_esp(i);
-		}
+		// if(config::visuals::esp::skeleton){
+		// 	skeleton_esp(i);
+		// }
 
-		if(config::visuals::esp::name){
-			name_esp(i);
-		}
+		// if(config::visuals::esp::name){
+		// 	name_esp(i);
+		// }
 
-		if(config::visuals::esp::health){
-			health_esp(i);
-		}
+		// if(config::visuals::esp::health){
+		// 	health_esp(i);
+		// }
 
 	}
 
@@ -150,8 +177,8 @@ void visuals::skeleton_esp(int index){
 
 
 
-			Vector2 bone1_wts = WorldToScreen(bone1, *visuals::viewMatrix).to_vector2();
-			Vector2 bone2_wts = WorldToScreen(bone2, *visuals::viewMatrix).to_vector2();
+			Vector2 bone1_wts = WorldToScreen(bone1, playerlist::viewMatrix).to_vector2();
+			Vector2 bone2_wts = WorldToScreen(bone2, playerlist::viewMatrix).to_vector2();
 
 
 			Draw::Line(bone1_wts, bone2_wts, FromFloatToColour(config::visuals::esp::skeletonColour), 2);
@@ -163,7 +190,7 @@ void visuals::name_esp(int index){
 
 
 		Vector3 feet = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
-		Vector2 feet_wts = WorldToScreen(feet, *visuals::viewMatrix).to_vector2();
+		Vector2 feet_wts = WorldToScreen(feet, playerlist::viewMatrix).to_vector2();
 
 		Draw::Text(feet_wts, playerlist::players[index].controller->m_sSanitizedPlayerName, FromFloatToColour(config::visuals::esp::nameColour), true);
 
@@ -187,8 +214,8 @@ void visuals::health_esp(int index){
 
 
 
-		Vector2 bottom_of_bar_wts = WorldToScreen(bottom_of_bar, *visuals::viewMatrix).to_vector2();
-		Vector2 top_of_bar_wts = WorldToScreen(top_of_bar, *visuals::viewMatrix).to_vector2();
+		Vector2 bottom_of_bar_wts = WorldToScreen(bottom_of_bar, playerlist::viewMatrix).to_vector2();
+		Vector2 top_of_bar_wts = WorldToScreen(top_of_bar, playerlist::viewMatrix).to_vector2();
 
 
 		float radius = (bottom_of_bar_wts.y - top_of_bar_wts.y) / 3.0f;
