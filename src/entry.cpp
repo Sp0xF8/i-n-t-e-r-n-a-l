@@ -1,7 +1,8 @@
 #include <Windows.h>
-
+#include <framework.h>
 #include <defines.h>
 
+#include <data.h>
 
 #ifdef _DEBUG
     #include <stdio.h>
@@ -16,6 +17,11 @@ void Unload(){
 	DLOG("=======================================================\n");
 
 
+	framework::Destroy();
+
+	DLOG("=======================================================\n");
+	DLOG("                     Unloaded\n");
+	DLOG("=======================================================\n");
 
 
 
@@ -40,9 +46,20 @@ void MainThread(const HMODULE dllHandle){
 	DLOG("=======================================================\n");
 
 
+	bool cont_op = true;
+
+	if(!framework::Init()){
+		DLOG("Error: MainThread() - framework::init() failed\n");
+		Unload();
+		cont_op = false;
+	}
+
+
+	
+
     
 
-	while (true){
+	while (cont_op){
 
 
 
@@ -50,12 +67,16 @@ void MainThread(const HMODULE dllHandle){
 
 		if (GetAsyncKeyState(VK_INSERT) & 1){
 			Unload();
-			break;
+			cont_op = false;
 		}
 		Sleep(100);
 	}
 
+	
+
 	#ifdef _DEBUG
+
+		DLOG("+FREE CONSOLE\n");
 		FreeConsole();
 	#endif
 

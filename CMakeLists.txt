@@ -14,26 +14,23 @@ file(GLOB_RECURSE HEADERS
 )
 
 file(GLOB_RECURSE FEATURES
-#             "src/features/misc/*.cpp"           "src/features/misc/*.h"
-#            "src/features/visuals/*.cpp"        "src/features/visuals/*.h"
-#             # "src/features/ragebot/*.cpp"        "src/features/ragebot/*.h"
-#             # "src/features/legitbot/*.cpp"       "src/features/legitbot/*.h"
-#             # "src/features/antiaim/*.cpp"        "src/features/antiaim/*.h"
+            "src/features/*.cpp"         "src/features/inc/*.h"
+
 )
 
 
 file (GLOB_RECURSE RESOURCES
             "res/*.cpp"             "res/*.h"
+			"res/cs/*.cpp"         "res/cs/*.h"
             "res/imgui/*.cpp"       "res/imgui/*.h"
             "res/MinHook/*.c"       "res/MinHook/*.h" 
 )
 
 include_directories("src/inc"
-                    # "src/features/misc"
-                    "src/features/visuals"
+                    "src/features/inc"
                     "res/imgui"
                     "res/MinHook"
-                    "res/fnv1a")
+					"res/cs")
 
 add_library(csgowin64 SHARED ${SOURCES} ${HEADERS} ${RESOURCES} ${FEATURES} ) 
 
