@@ -24,8 +24,6 @@ namespace playerlist {
 
 	view_matrix_t viewMatrix;
 
-	uintptr_t entitylist = NULL;
-
 	player_t players[32] = { 0 };
 
 	bool setupcomplete = false;
@@ -50,8 +48,6 @@ bool playerlist::setup() {
 		return false;
 	}
 
-	entitylist = *reinterpret_cast<uintptr_t*>(data::client_dll + offsets::client_dll::dwEntityList);
-
 
 	
 
@@ -73,6 +69,9 @@ void playerlist::updatePlayers() {
 	}
 
 	viewMatrix = *reinterpret_cast<view_matrix_t*>(data::client_dll + offsets::client_dll::dwViewMatrix);
+
+	localPlayer.pawn = ez_cast(C_CSPlayerPawn, data::client_dll + offsets::client_dll::dwLocalPlayerPawn);
+	localPlayer.controller = ez_cast(CCSPlayerController, data::client_dll + offsets::client_dll::dwLocalPlayerController);
 
 	DLOG("ViewMatrix: %p\n", viewMatrix);
 
