@@ -121,13 +121,13 @@ void visuals::run(){
 			skeleton_esp(i);
 		}
 
-		// if(config::visuals::esp::name){
-		// 	name_esp(i);
-		// }
+		if(config::visuals::esp::name){
+			name_esp(i);
+		}
 
-		// if(config::visuals::esp::health){
-		// 	health_esp(i);
-		// }
+		if(config::visuals::esp::health){
+			health_esp(i);
+		}
 
 	}
 
@@ -227,53 +227,65 @@ void visuals::skeleton_esp(int index){
 
 void visuals::name_esp(int index){
 
+	if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
+			return;
+		}
 
-		Vector3 feet = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
-		Vector2 feet_wts = WorldToScreen(feet, playerlist::viewMatrix).to_vector2();
+	if(playerlist::players[index].controller->m_pClassType != playerlist::localPlayer.controller->m_pClassType){
+		return;
+	}
 
-		Draw::Text(feet_wts, playerlist::players[index].controller->m_sSanitizedPlayerName, FromFloatToColour(config::visuals::esp::nameColour), true);
+
+	Vector3 feet = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
+	Vector2 feet_wts = WorldToScreen(feet, playerlist::viewMatrix).to_vector2();
+
+	Draw::Text(feet_wts, playerlist::players[index].controller->m_sSanitizedPlayerName, FromFloatToColour(config::visuals::esp::nameColour), true);
 
 
 }
 
 void visuals::health_esp(int index){
 
-
-		Vector3 bottom_of_bar = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
-
-
-		Vector3 head = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + boneids::HEAD * 0x20);
-
-		float height = bottom_of_bar.z - head.z;
-
-		
-
-		Vector3 top_of_bar = bottom_of_bar;
-		top_of_bar.z -= (height * ( playerlist::players[index].pawn->m_iHealth / 100.0f));
-
-
-
-		Vector2 bottom_of_bar_wts = WorldToScreen(bottom_of_bar, playerlist::viewMatrix).to_vector2();
-		Vector2 top_of_bar_wts = WorldToScreen(top_of_bar, playerlist::viewMatrix).to_vector2();
-
-
-		float radius = (bottom_of_bar_wts.y - top_of_bar_wts.y) / 3.0f;
-
-		bottom_of_bar_wts.x -= radius;
-		top_of_bar_wts.x -= radius;
-
-		Colour playerHealthColour = Colour(0.0f, 1.0f, 0.0f, 1.0f);
-
-		if (playerlist::players[index].pawn->m_iHealth < 75) {
-			playerHealthColour = Colour(1.0f, 1.0f, 0.0f, 1.0f);
-		}
-		else if (playerlist::players[index].pawn->m_iHealth < 50) {
-			playerHealthColour = Colour(1.0f, 0.5f, 0.0f, 1.0f);
-		}
-		else if (playerlist::players[index].pawn->m_iHealth < 30) {
-			playerHealthColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
+	if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
+			return;
 		}
 
-		Draw::Line(bottom_of_bar_wts, top_of_bar_wts, playerHealthColour, 2);
+
+	Vector3 bottom_of_bar = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
+
+
+	Vector3 head = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + boneids::HEAD * 0x20);
+
+	float height = bottom_of_bar.z - head.z;
+
+	
+
+	Vector3 top_of_bar = bottom_of_bar;
+	top_of_bar.z -= (height * ( playerlist::players[index].pawn->m_iHealth / 100.0f));
+
+
+
+	Vector2 bottom_of_bar_wts = WorldToScreen(bottom_of_bar, playerlist::viewMatrix).to_vector2();
+	Vector2 top_of_bar_wts = WorldToScreen(top_of_bar, playerlist::viewMatrix).to_vector2();
+
+
+	float radius = (bottom_of_bar_wts.y - top_of_bar_wts.y) / 3.0f;
+
+	bottom_of_bar_wts.x -= radius;
+	top_of_bar_wts.x -= radius;
+
+	Colour playerHealthColour = Colour(0.0f, 1.0f, 0.0f, 1.0f);
+
+	if (playerlist::players[index].pawn->m_iHealth < 75) {
+		playerHealthColour = Colour(1.0f, 1.0f, 0.0f, 1.0f);
+	}
+	else if (playerlist::players[index].pawn->m_iHealth < 50) {
+		playerHealthColour = Colour(1.0f, 0.5f, 0.0f, 1.0f);
+	}
+	else if (playerlist::players[index].pawn->m_iHealth < 30) {
+		playerHealthColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
+	}
+
+	Draw::Line(bottom_of_bar_wts, top_of_bar_wts, playerHealthColour, 2);
 
 }
