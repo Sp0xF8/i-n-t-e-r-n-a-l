@@ -14,6 +14,24 @@ public:
 
 
 
+class view_matrix_t 
+{
+public:
+	float matrix[4][4];
+
+
+	float* operator[](int index) {
+		return matrix[index];
+	}
+};
+
+// class view_matrix_c
+// {
+// public:
+// 	view_matrix_t view_matrix; //0x0000
+// }; //Size: 0x0040
+
+
 
 // Created with ReClass.NET 1.2 by KN4CK3R
 

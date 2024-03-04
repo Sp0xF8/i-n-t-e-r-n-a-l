@@ -3,25 +3,14 @@
 #include <defines.h>
 #include <visuals.h>
 
+#include <vector>
+
 
 
 bool player_t::Active() {
 
 
 	if (pawn == nullptr || controller == nullptr) {
-		return false;
-	}
-
-	if(pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-		return false;
-	}
-
-	if(controller->m_pClassType != playerlist::localPlayer.controller->m_pClassType){
-		return false;
-	}
-	
-
-	if (pawn->m_iHealth <= 0) {
 		return false;
 	}
 
@@ -32,6 +21,8 @@ bool player_t::Active() {
 namespace playerlist {
 
 	player_t localPlayer = { 0 };
+
+	view_matrix_t viewMatrix;
 
 	uintptr_t entitylist = NULL;
 
@@ -61,7 +52,11 @@ bool playerlist::setup() {
 
 	entitylist = *reinterpret_cast<uintptr_t*>(data::client_dll + offsets::client_dll::dwEntityList);
 
-	visuals::viewMatrix = (view_matrix_t*)(data::client_dll + offsets::client_dll::dwViewMatrix);
+
+	
+
+	
+
 
 	setupcomplete = true;
 
@@ -76,6 +71,12 @@ void playerlist::updatePlayers() {
 		setup();
 		return;
 	}
+
+	viewMatrix = *reinterpret_cast<view_matrix_t*>(data::client_dll + offsets::client_dll::dwViewMatrix);
+
+	DLOG("ViewMatrix: %p\n", viewMatrix);
+
+	DLOG("viewMatrix[0][0]: %f\n", viewMatrix.matrix[0][0]);
 
 	for (uint64_t entities = 0; entities < 32; entities++) {
 
