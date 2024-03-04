@@ -62,6 +62,8 @@ void visuals::run(){
 	DLOG("viewMatrix[0][0]: %f\n", playerlist::viewMatrix.matrix[0][0]);
 	
 	for (int i = 0; i < 32; i++) {
+
+		DLOG("====================================\n");
 		DLOG("Running visuals for player %d\n", i);
 
 		DLOG("playerlist::players[i].controller: %p\n", playerlist::players[i].controller);
@@ -86,15 +88,33 @@ void visuals::run(){
 
 
 		if(playerlist::players[i].pawn == playerlist::localPlayer.pawn){
-			DLOG("Player %d is the local player\n", i);
-			continue;
+			DLOG("Player %d is the LOCAL PLAYER\n", i);
+			//continue;
 		}
 
+		DLOG("m_pClasstype %d: %p\n", i, playerlist::players[i].pawn->m_pClassType);
+		DLOG("m_pClasstype& %d: %p\n", i, &playerlist::players[i].pawn->m_pClassType);
+
+		DLOG("localPlayer.m_pClasstype: %p\n", playerlist::localPlayer.pawn->m_pClassType);
+		DLOG("localPlayer.m_pClasstype&: %p\n", &playerlist::localPlayer.pawn->m_pClassType);
+
+
+		if(playerlist::players[i].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
+			DLOG("ptr %d is not the same class as the local player\n", i);
+			
+		} else {
+			DLOG("ptr %d is the same class as the local player\n", i);
+		}
+
+
 		if(playerlist::players[i].pawn->m_iHealth <= 0){
+			DLOG("Player %d is dead\n", i);
 			continue;
 		} else {
 			DLOG("Player %d is alive : %d\n", i, playerlist::players[i].pawn->m_iHealth);
 		}
+
+		
 
 
 		// if(config::visuals::esp::skeleton){
@@ -168,21 +188,29 @@ bone_connection bone_connections[] = {
 
 void visuals::skeleton_esp(int index){
 
-
-		for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) {
-
-
-			Vector3 bone1 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone1 * 0x20);
-			Vector3 bone2 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone2 * 0x20);
+	if(!playerlist::players[index].Active()){
+		return;
+	}
 
 
 
-			Vector2 bone1_wts = WorldToScreen(bone1, playerlist::viewMatrix).to_vector2();
-			Vector2 bone2_wts = WorldToScreen(bone2, playerlist::viewMatrix).to_vector2();
+	
 
 
-			Draw::Line(bone1_wts, bone2_wts, FromFloatToColour(config::visuals::esp::skeletonColour), 2);
-		}
+	for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) {
+
+		
+		Vector3 bone1 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone1 * 0x20);
+		Vector3 bone2 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone2 * 0x20);
+
+
+
+		Vector2 bone1_wts = WorldToScreen(bone1, playerlist::viewMatrix).to_vector2();
+		Vector2 bone2_wts = WorldToScreen(bone2, playerlist::viewMatrix).to_vector2();
+
+
+		Draw::Line(bone1_wts, bone2_wts, FromFloatToColour(config::visuals::esp::skeletonColour), 2);
+	}
 }
 
 
