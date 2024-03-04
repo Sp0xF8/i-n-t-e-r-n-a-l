@@ -22,7 +22,6 @@ namespace playerlist{
 
 	extern view_matrix_t viewMatrix;
 
-	extern uintptr_t entitylist;
 
 	extern player_t players[32];
 

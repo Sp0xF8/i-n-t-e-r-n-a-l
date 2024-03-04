@@ -117,9 +117,9 @@ void visuals::run(){
 		
 
 
-		// if(config::visuals::esp::skeleton){
-		// 	skeleton_esp(i);
-		// }
+		if(config::visuals::esp::skeleton){
+			skeleton_esp(i);
+		}
 
 		// if(config::visuals::esp::name){
 		// 	name_esp(i);
@@ -199,7 +199,18 @@ void visuals::skeleton_esp(int index){
 
 	for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) {
 
-		
+		if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
+			continue;
+		}
+
+
+		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState == nullptr){
+			continue;
+		}
+
+		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix == NULL){
+			continue;
+		}
 		Vector3 bone1 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone1 * 0x20);
 		Vector3 bone2 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone2 * 0x20);
 
