@@ -3,6 +3,8 @@
 #include <defines.h>
 #include <data.h>
 
+#include <framework.h>
+
 #include <playerlist.h>
 
 
@@ -95,11 +97,17 @@ void hooks::Destroy(){
 
 
 HRESULT __stdcall hooks::hkPresentScene(IDXGISwapChain* ppSwapChain, UINT SyncInterval, UINT Flags) { 
+	
+	if(framework::exit){
+		return oPresentScene(ppSwapChain, SyncInterval, Flags);
+	}
+
 	DLOG("================Present Scene Debugging================\n");
 	DLOG("pDevice:                            0x%p\n", gui::pDevice);
 	DLOG("pSwapChain:                         0x%p\n", gui::pSwapChain);
 	DLOG("ppSwapChain:                        0x%p\n", ppSwapChain);
 	DLOG("Gui::setupComplete:                 0x%d\n", gui::setupComplete);
+
 
     if (!gui::setupComplete && ppSwapChain){
 		gui::SetupMenu(ppSwapChain);

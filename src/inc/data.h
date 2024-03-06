@@ -16,6 +16,8 @@ namespace data {
 
 	extern dwGameTypes* gameType;
 
+	extern int* dwForceAttack;
+
 	
 
 

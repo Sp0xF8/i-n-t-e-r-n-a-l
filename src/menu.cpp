@@ -2,6 +2,8 @@
 #include <config.h>
 #include <defines.h>
 
+#include <framework.h>
+
 #include <string>
 
 #include <imgui.h>
@@ -133,8 +135,72 @@ void menu::DrawMenu(){
         switch (config::menu::tabIndex)
         {
         case 0: //Legit
+
+			//column 1
             
-            ImGui::Text("Legit");
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryHeadderColour));
+            ImGui::BeginChild("##LegitHeadder", ImVec2(bodysize.x / 3, config::menu::tabHeight), true);
+            {
+                TextCentered("Legit");
+            }
+            ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+
+			ImGui::SetCursorPos(ImVec2(0 + MAGNIFY_SIZE(8) , config::menu::tabHeight + 8));
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryBodyColour));
+			ImGui::BeginChild("##LegitBody", ImVec2(bodysize.x / 3, ImGui::GetContentRegionAvail().y - MAGNIFY_SIZE(10)), true);
+			{
+				ImGui::Checkbox("Enabled", &config::legitbot::enabled);
+
+			}
+
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+			//column 2
+
+			ImGui::SetCursorPos(ImVec2((bodysize.x / 3) + MAGNIFY_SIZE(16), 0 + MAGNIFY_SIZE(10)));
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryHeadderColour));
+			ImGui::BeginChild("##triggerbotHeadder", ImVec2(bodysize.x / 3, config::menu::tabHeight), true);
+			{
+				TextCentered("Triggerbot");
+			}
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+			ImGui::SetCursorPos(ImVec2(bodysize.x / 3 + MAGNIFY_SIZE(16), config::menu::tabHeight + 8));
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryBodyColour));
+			ImGui::BeginChild("##triggerbotBody", ImVec2(bodysize.x / 3, ImGui::GetContentRegionAvail().y - MAGNIFY_SIZE(10)), true);
+			{
+				ImGui::Checkbox("Enabled", &config::legitbot::triggerbot::enabled);
+
+				//set keycode somehow
+
+				ImGui::Checkbox("Friendly Fire", &config::legitbot::triggerbot::friendlyFire);
+
+				ImGui::Checkbox("Scoped Only", &config::legitbot::triggerbot::scopedOnly);
+
+				ImGui::Checkbox("Ignore Flash", &config::legitbot::triggerbot::ignoreFlash);
+
+				ImGui::SliderFloat("Flash Alpha", &config::legitbot::triggerbot::flashAlpha, 0.0f, 255.0f);
+
+				ImGui::Checkbox("Ignore Smoke", &config::legitbot::triggerbot::ignoreSmoke);
+
+				ImGui::Checkbox("Delay Shot", &config::legitbot::triggerbot::delayShot);
+
+				ImGui::SliderInt("Delay", &config::legitbot::triggerbot::delay, 0, 1000);
+
+				
+			}
+
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+
 
             break;
         case 1: //Rage
@@ -207,7 +273,33 @@ void menu::DrawMenu(){
 
         case 4: //Settings
                         
-            ImGui::Text("Settings");
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryHeadderColour));
+            ImGui::BeginChild("##SettingsHeadder", ImVec2(bodysize.x / 3, config::menu::tabHeight), true);
+            {
+                TextCentered("Settings");
+            }
+            ImGui::EndChild();
+			ImGui::PopStyleColor();
+
+
+			ImGui::SetCursorPos(ImVec2(0 + MAGNIFY_SIZE(8) , config::menu::tabHeight + 8));
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryBodyColour));
+			ImGui::BeginChild("##SettingsBody", ImVec2(bodysize.x / 3, ImGui::GetContentRegionAvail().y - MAGNIFY_SIZE(10)), true);
+			{
+				
+
+				ImGui::Button("Unload", ImVec2(ImGui::GetContentRegionAvail().x, MAGNIFY_SIZE(30)));
+				{
+					if(ImGui::IsItemClicked()){
+						framework::exit = true;
+					}
+				}
+
+			}
+
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
 
             break;
         default:
