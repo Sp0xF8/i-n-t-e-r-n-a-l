@@ -18,6 +18,7 @@ namespace data {
 
 	extern int* dwForceAttack;
 
+	extern int* dwForceJump;
 	
 
 

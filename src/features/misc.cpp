@@ -2,6 +2,7 @@
 #include <config.h>
 #include <framework.h>
 #include <playerlist.h>
+#include <data.h>
 
 #include <windows.h>
 
@@ -30,8 +31,16 @@ void misc::run(){
 void misc::bunnyhop(){
 
 	
-	DLOG("Running bunnyhop\n");
-	DLOG("LocalPlayer: %d\n", playerlist::localPlayer.pawn->m_iHealth);
+	if(GetAsyncKeyState(VK_SPACE) && playerlist::localPlayer.pawn->m_fFlags == 65665){
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+		*data::dwForceJump = 65537;
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
+		*data::dwForceJump = 256;
+	}
 	
 
 }

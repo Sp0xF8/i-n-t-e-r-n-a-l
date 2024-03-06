@@ -46,6 +46,24 @@ public:
 	char pad_0031[7]; //0x0031
 }; //Size: 0x0038
 
+// class C_BaseEntity : public CEntityInstance
+// {
+// public:
+// 	class CBodyComponent *m_CBodyComponent; //0x0038
+// 	void *m_NetworkTransmitComponent; //0x0040
+// 	char pad_0048[720]; //0x0048
+// 	class CGameSceneNode *m_pGameSceneNode; //0x0318
+// 	void *m_pCRenderComponent; //0x0320
+// 	void *m_pColission; //0x0328
+// 	int32_t m_iMaxHealth; //0x0330
+// 	int32_t m_iHealth; //0x0334
+// 	uint8_t m_lifeState; //0x0338
+// 	bool m_bTakesDamage; //0x0339
+// 	char pad_033A[145]; //0x033A
+// 	uint8_t m_iTeamNum; //0x03CB
+// 	char pad_03CC[388]; //0x03CC
+// }; //Size: 0x0550
+
 class C_BaseEntity : public CEntityInstance
 {
 public:
@@ -59,9 +77,15 @@ public:
 	int32_t m_iHealth; //0x0334
 	uint8_t m_lifeState; //0x0338
 	bool m_bTakesDamage; //0x0339
-	char pad_033A[145]; //0x033A
+	char pad_033A[26]; //0x033A
+	int32_t m_iEFlags; //0x0354
+	uint8_t m_nWaterType; //0x0358
+	char pad_0359[114]; //0x0359
 	uint8_t m_iTeamNum; //0x03CB
-	char pad_03CC[388]; //0x03CC
+	uint32_t m_spawnflags; //0x03CC
+	char pad_03D0[4]; //0x03D0
+	uint32_t m_fFlags; //0x03D4
+	char pad_03D8[376]; //0x03D8
 }; //Size: 0x0550
 
 class CBodyComponent

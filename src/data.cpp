@@ -20,6 +20,8 @@ namespace data {
 
 	int* dwForceAttack = 0;
 
+	int* dwForceJump = 0;
+
 
 	
 
@@ -35,5 +37,7 @@ void data::setup() {
 	gameType = ez_cast(dwGameTypes, matchmaking_dll + offsets::matchmaking_dll::dwGameTypes_mapName);
 
 	dwForceAttack = reinterpret_cast<int*>(client_dll + offsets::client_dll::dwForceAttack);
+
+	dwForceJump = reinterpret_cast<int*>(client_dll + offsets::client_dll::dwForceJump);
 
 }
