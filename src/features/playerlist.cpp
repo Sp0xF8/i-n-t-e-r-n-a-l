@@ -73,9 +73,53 @@ void playerlist::updatePlayers() {
 	localPlayer.pawn = ez_cast(C_CSPlayerPawn, data::client_dll + offsets::client_dll::dwLocalPlayerPawn);
 	localPlayer.controller = ez_cast(CCSPlayerController, data::client_dll + offsets::client_dll::dwLocalPlayerController);
 
-	DLOG("ViewMatrix: %p\n", viewMatrix);
+	
+	// DLOG("localplayer.pawn->m_iIDEntIndex: %d\n", localPlayer.pawn->m_iIDEntIndex);
+	// DLOG("localplayer.pawn->m_flFlashMaxAlpha: %f\n", localPlayer.pawn->m_flFlashMaxAlpha);
+	// DLOG("localplayer.pawn->m_bisscoped: %d\n", localPlayer.pawn->m_bIsScoped);
 
-	DLOG("viewMatrix[0][0]: %f\n", viewMatrix.matrix[0][0]);
+	// //print memory address of localplayer.pawn->m_iHealth
+	// DLOG("localplayer.pawn->m_iHealth: %p\n", &localPlayer.pawn->m_iHealth);
+	// //print memory address of localplayer.pawn->m_iIDEntIndex
+	
+
+	// DLOG("localplayer.pawn->m_CRenderComponent: %p\n", &localPlayer.pawn->m_CRenderComponent);
+
+	// DLOG("localplayer.pawn->m_buseclientoverridetint: %p\n", &localPlayer.pawn->m_bUseClientOverrideTint);
+
+	// DLOG("localplayer.pawn->m_vecForce: %p\n", &localPlayer.pawn->m_vecForce);
+
+	// DLOG("localplayer.pawn->m_bhasanimatedmaterialattributes: %p\n", &localPlayer.pawn->m_bHasAnimatedMaterialAttributes);
+
+	// DLOG("localplayer.pawn->m_bloodColor: %p\n", &localPlayer.pawn->m_bloodColor);
+
+	// DLOG("localplayer.pawn->m_flFieldOfView: %p\n", &localPlayer.pawn->m_flFieldOfView);
+
+	// DLOG("localplayer.pawn->m_pWeaponServices: %p\n", &localPlayer.pawn->m_pWeaponServices);
+
+	// DLOG("localplayer.pawn->m_flFOVAdjustSensitivity: %p\n", &localPlayer.pawn->m_flFOVSensitivityAdjust);
+
+	// DLOG("localplayer.pawn->m_bIsSwappingToPredictableController: %p\n", &localPlayer.pawn->m_bIsSwappingToPredictableController);
+
+	// DLOG("localplayer.pawn->m_pPingServices: %p\n", &localPlayer.pawn->m_pPingServices);
+
+
+
+	// DLOG("localplayer.pawn->m_iIsScoped: %p\n", &localPlayer.pawn->m_bIsScoped);
+
+	// DLOG("localplayer.pawn->m_iIDEntIndex: %p\n", &localPlayer.pawn->m_iIDEntIndex);
+
+
+
+
+
+
+
+	
+
+	// DLOG("ViewMatrix: %p\n", viewMatrix);
+
+	// DLOG("viewMatrix[0][0]: %f\n", viewMatrix.matrix[0][0]);
 
 	for (uint64_t entities = 0; entities < 32; entities++) {
 
@@ -125,8 +169,8 @@ void playerlist::updatePlayers() {
 		players[entities].controller = (CCSPlayerController*)entityController;
 		players[entities].pawn = (C_CSPlayerPawn*)entityPawn;
 
-		DLOG("PlayerPawn: %p\n", entityPawn);
-		DLOG("PlayerController: %p\n", entityController);
+		// DLOG("PlayerPawn: %p\n", entityPawn);
+		// DLOG("PlayerController: %p\n", entityController);
 
 
 	}

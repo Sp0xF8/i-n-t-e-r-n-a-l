@@ -80,4 +80,23 @@ namespace config {
 
 		}
 	}
+
+	namespace legitbot {
+		extern bool enabled;
+
+		namespace triggerbot {
+			extern bool enabled;
+			extern bool onKey;
+			extern int key;
+			extern bool friendlyFire;
+			extern bool scopedOnly;
+			extern bool ignoreJump;
+			extern bool ignoreFlash;
+			extern float flashAlpha;
+			extern bool ignoreSmoke;
+			extern bool delayShot;
+			extern int delay;
+		}
+	}
+
 }

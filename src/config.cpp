@@ -81,4 +81,25 @@ namespace config {
 
         }
     }
+
+
+	namespace legitbot {
+		bool enabled = false;
+
+		namespace triggerbot {
+			bool enabled = false;
+			bool onKey = false;
+			int key = 0x46;
+			bool friendlyFire = false;
+			bool scopedOnly = false;
+			bool ignoreJump = false;
+			bool ignoreFlash = false;
+			float flashAlpha = 0.0f;
+			bool ignoreSmoke = false;
+			bool delayShot = false;
+			int delay = 0;
+
+		}
+
+	}
 }

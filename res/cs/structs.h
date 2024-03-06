@@ -32,11 +32,7 @@ public:
 // }; //Size: 0x0040
 
 
-
 // Created with ReClass.NET 1.2 by KN4CK3R
-
-
-
 
 class CEntityInstance
 {
@@ -297,7 +293,8 @@ public:
 	float m_flGlowStartTime; //0x004C
 	bool m_bEligibleForScreenHighlight; //0x0050
 	bool m_bGlowing; //0x0051
-}; //Size: 0x0052
+	char pad_0052[6]; //0x0052
+}; //Size: 0x0058
 
 class C_BaseModelEntity : public C_BaseEntity
 {
@@ -309,48 +306,39 @@ public:
 	char pad_0A81[119]; //0x0A81
 	class CCollisionProperty m_Collision; //0x0AF8
 	class CGlowProperty m_Glow; //0x0BA8
-	char pad_0BFA[154]; //0x0BFA
-	bool m_bUseClientOverrideTint; //0x0C94
-}; //Size: 0x0C95
+	char pad_0C00[150]; //0x0C00
+	bool m_bUseClientOverrideTint; //0x0C96
+	char pad_0C97[1]; //0x0C97
+}; //Size: 0x0C98
 
 class CBaseAnimGraph : public C_BaseModelEntity
 {
 public:
-	char pad_0C95[219]; //0x0C95
+	char pad_0C98[216]; //0x0C98
 	Vector3 m_vecForce; //0x0D70
 	int32_t m_nForceBone; //0x0D7C
 	class CBaseAnimGraph *m_pClientsideRagdoll; //0x0D80
 	char pad_0D88[32]; //0x0D88
 	bool m_bClientRagdoll; //0x0DA8
-	char pad_0DA9[15]; //0x0DA9
-	bool m_bHasAnimatedMaterialAttributes; //0x0DB8
-}; //Size: 0x0DB9
-
-class C_BaseFlex_Emphasized_Phoneme
-{
-public:
-	char m_sClassName[24]; //0x0000
-	float m_flAmount; //0x0018
-	bool m_bRequired; //0x001C
-	bool m_bBasechecked; //0x001D
-	bool m_bValid; //0x001E
-}; //Size: 0x001F
+	char pad_0DA9[19]; //0x0DA9
+	bool m_bHasAnimatedMaterialAttributes; //0x0DBC
+	char pad_0DBD[3]; //0x0DBD
+}; //Size: 0x0DC0
 
 class C_BaseFlex : public CBaseAnimGraph
 {
 public:
-	char pad_0DB9[599]; //0x0DB9
-	class C_BaseFlex_Emphasized_Phoneme m_PhonemeClasses[3]; //0x1010
-}; //Size: 0x106D
+	char pad_0DC0[688]; //0x0DC0
+}; //Size: 0x1070
 
 class C_BaseCombatCharacter : public C_BaseFlex
 {
 public:
-	char pad_106D[27]; //0x106D
-	int32_t m_bloodColor; //0x1088
-	bool m_leftFootAttachment; //0x108C
-	bool m_rightFootAttachment; //0x108D
-	char pad_108E[14]; //0x108E
+	char pad_1070[20]; //0x1070
+	int32_t m_bloodColor; //0x1084
+	bool m_leftFootAttachment; //0x1088
+	bool m_rightFootAttachment; //0x1089
+	char pad_108A[18]; //0x108A
 	float m_flFieldOfView; //0x109C
 }; //Size: 0x10A0
 
@@ -373,12 +361,23 @@ public:
 	char pad_127C[24]; //0x127C
 	int32_t m_hController; //0x1294
 	bool m_bIsSwappingToPredictableController; //0x1298
-}; //Size: 0x1299
+	char pad_1299[7]; //0x1299
+}; //Size: 0x12A0
+
+class C_BaseFlex_Emphasized_Phoneme
+{
+public:
+	char m_sClassName[24]; //0x0000
+	float m_flAmount; //0x0018
+	bool m_bRequired; //0x001C
+	bool m_bBasechecked; //0x001D
+	bool m_bValid; //0x001E
+}; //Size: 0x001F
 
 class C_CSPlayerPawnBase : public C_BasePlayerPawn
 {
 public:
-	char pad_1299[39]; //0x1299
+	char pad_12A0[32]; //0x12A0
 	void *m_pPingServices; //0x12C0
 	void *m_pViewModelServices; //0x12C8
 	char pad_12D0[304]; //0x12D0
@@ -420,7 +419,8 @@ public:
 	int32_t m_iIDEntIndex; //0x15A4
 	char pad_15A8[24]; //0x15A8
 	int32_t m_iTargetedWeaponEntIndex; //0x15C0
-	char pad_15C4[84]; //0x15C4
+	int32_t m_iOldIDEntIndex; //0x15C4
+	char pad_15C8[80]; //0x15C8
 	float m_flLastSmokeOverlayAlpha; //0x1618
 	Vector3 m_vLastSmokeOverlayColor; //0x161C
 	int32_t m_nPlayerSmokedFx; //0x1628
@@ -490,4 +490,3 @@ public:
 	bool m_bSkipOneHeadConstraintUpdate; //0x2410
 	char pad_2411[3]; //0x2411
 }; //Size: 0x2414
-

@@ -56,15 +56,16 @@ void visuals::run(){
 		return;
 	}
 
-	DLOG("Running visuals\n");
+	// DLOG("Running visuals\n");
 	
-	DLOG("viewMatrix: %p\n", playerlist::viewMatrix);
-	DLOG("viewMatrix[0][0]: %f\n", playerlist::viewMatrix.matrix[0][0]);
+	// DLOG("viewMatrix: %p\n", playerlist::viewMatrix);
+	// DLOG("viewMatrix[0][0]: %f\n", playerlist::viewMatrix.matrix[0][0]);
 	
 	for (int i = 0; i < 32; i++) {
 
 		DLOG("====================================\n");
 		DLOG("Running visuals for player %d\n", i);
+		
 
 		DLOG("playerlist::players[i].controller: %p\n", playerlist::players[i].controller);
 		DLOG("playerlist::players[i].pawn: %p\n", playerlist::players[i].pawn);
@@ -91,6 +92,8 @@ void visuals::run(){
 			DLOG("Player %d is the LOCAL PLAYER\n", i);
 			//continue;
 		}
+
+		DLOG("playerlist::players[i].pawn->m_iIDEntIndex: %d\n", playerlist::players[i].pawn->m_iIDEntIndex);
 
 		DLOG("m_pClasstype %d: %p\n", i, playerlist::players[i].pawn->m_pClassType);
 		DLOG("m_pClasstype& %d: %p\n", i, &playerlist::players[i].pawn->m_pClassType);

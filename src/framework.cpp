@@ -5,6 +5,19 @@
 #include <defines.h>
 #include <offsets.h>
 #include <string>
+#include <legitbot.h>
+
+
+
+namespace framework {
+	bool exit = false;
+
+	std::thread legitbot_thread;
+
+}
+
+
+
 
 bool framework::Init() {
     
@@ -49,6 +62,10 @@ bool framework::Init() {
 	DLOG("gui::windowHeight:                  %d\n", gui::windowHeight);
 	DLOG("gui::windowWidth:                   %d\n", gui::windowWidth);
 	DLOG("=======================================================\n");
+
+
+	legitbot_thread = std::thread(legitbot::run);
+
 	
 
 	return true;
@@ -57,8 +74,13 @@ bool framework::Init() {
 
 void framework::Destroy() {
 
+	legitbot_thread.join();
+
 	hooks::Destroy();
 	gui::Destroy();
 	gui::UnhookInput();
+
+
+	
 
 }

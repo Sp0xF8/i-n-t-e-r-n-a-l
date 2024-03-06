@@ -46,12 +46,12 @@ void MainThread(const HMODULE dllHandle){
 	DLOG("=======================================================\n");
 
 
-	bool cont_op = true;
 
 	if(!framework::Init()){
 		DLOG("Error: MainThread() - framework::init() failed\n");
+		framework::exit = true;
+		std::this_thread::sleep_for(std::chrono::milliseconds(200));
 		Unload();
-		cont_op = false;
 	}
 
 
@@ -59,15 +59,15 @@ void MainThread(const HMODULE dllHandle){
 
     
 
-	while (cont_op){
+	while (true){
 
 
 
 
 
-		if (GetAsyncKeyState(VK_INSERT) & 1){
+		if (framework::exit){
 			Unload();
-			cont_op = false;
+			break;
 		}
 		Sleep(100);
 	}
