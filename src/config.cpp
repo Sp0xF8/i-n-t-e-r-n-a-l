@@ -102,4 +102,9 @@ namespace config {
 		}
 
 	}
+
+	namespace misc {
+		bool enabled = false;
+		bool bunnyhop = false;
+	}
 }

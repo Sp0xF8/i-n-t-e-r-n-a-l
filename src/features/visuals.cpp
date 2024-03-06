@@ -196,23 +196,20 @@ void visuals::skeleton_esp(int index){
 	}
 
 
-
-	
-
-
-	for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) {
+	for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) 
+	{
 
 		if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-			continue;
+			return;
 		}
 
 
 		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState == nullptr){
-			continue;
+			return;
 		}
 
 		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix == NULL){
-			continue;
+			return;
 		}
 		Vector3 bone1 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone1 * 0x20);
 		Vector3 bone2 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone2 * 0x20);

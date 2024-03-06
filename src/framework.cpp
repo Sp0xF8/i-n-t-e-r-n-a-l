@@ -6,13 +6,14 @@
 #include <offsets.h>
 #include <string>
 #include <legitbot.h>
-
+#include <misc.h>
 
 
 namespace framework {
 	bool exit = false;
 
 	std::thread legitbot_thread;
+	std::thread misc_thread;
 
 }
 
@@ -66,6 +67,8 @@ bool framework::Init() {
 
 	legitbot_thread = std::thread(legitbot::run);
 
+	misc_thread = std::thread(misc::run);
+
 	
 
 	return true;
@@ -73,6 +76,8 @@ bool framework::Init() {
 }
 
 void framework::Destroy() {
+
+	misc_thread.join();
 
 	legitbot_thread.join();
 

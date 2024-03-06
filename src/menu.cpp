@@ -263,11 +263,26 @@ void menu::DrawMenu(){
             break;
         case 3: //Misc
                     
-            ImGui::Text("Misc");
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryHeadderColour));
+			ImGui::BeginChild("##MiscHeadder", ImVec2(bodysize.x / 3, config::menu::tabHeight), true);
+			{
+				TextCentered("Misc");
+			}
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
 
-            if(config::visuals::esp::name){
-                ImGui::Text("PlayerList");
-            }
+
+			ImGui::SetCursorPos(ImVec2(0 + MAGNIFY_SIZE(8) , config::menu::tabHeight + 8));
+
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, Float_To_ImVec4(config::menu::colours::categoryBodyColour));
+			ImGui::BeginChild("##MiscBody", ImVec2(bodysize.x / 3, ImGui::GetContentRegionAvail().y - MAGNIFY_SIZE(10)), true);
+			{
+				ImGui::Checkbox("Enabled", &config::misc::enabled);
+				ImGui::Checkbox("Bunnyhop", &config::misc::bunnyhop);
+			}
+
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
 
             break;
 

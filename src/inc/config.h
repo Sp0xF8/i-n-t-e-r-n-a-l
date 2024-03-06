@@ -99,4 +99,9 @@ namespace config {
 		}
 	}
 
+
+	namespace misc {
+		extern bool enabled;
+		extern bool bunnyhop;
+	}
 }

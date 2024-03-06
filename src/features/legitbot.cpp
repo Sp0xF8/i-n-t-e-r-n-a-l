@@ -19,6 +19,10 @@ void legitbot::run(){
 			continue;
 		}
 
+		if(!playerlist::setupcomplete){
+			continue;
+		}
+
 
 
 		if(config::legitbot::triggerbot::enabled){
@@ -30,11 +34,6 @@ void legitbot::run(){
 
 
 void legitbot::triggerbot(){
-
-
-	if(!playerlist::setupcomplete){
-		return;
-	}
 
 	C_CSPlayerPawn* localPlayer = ez_cast(C_CSPlayerPawn, data::client_dll + offsets::client_dll::dwLocalPlayerPawn);
 
