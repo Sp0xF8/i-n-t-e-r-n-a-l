@@ -264,7 +264,7 @@ void gui::Render(IDXGISwapChain* pSwapChain) {
     
 
 
-	visuals::run();
+	// visuals::run();
     
     
 
