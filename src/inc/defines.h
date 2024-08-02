@@ -1,4 +1,5 @@
 #pragma once
+#pragma warning(disable : 4477)
 
 
 #include <stdio.h>

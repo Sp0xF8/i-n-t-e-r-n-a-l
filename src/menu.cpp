@@ -234,15 +234,36 @@ void menu::DrawMenu(){
 				COLOUR_SPACING SAMEL
 				ImGui::ColorEdit4("#BoxColour", config::visuals::esp::boxColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
-				ImGui::Checkbox("Health", &config::visuals::esp::health); 
+                ImGui::Checkbox("Dot", &config::visuals::esp::dot); SAMEL
+                COLOUR_SPACING SAMEL
+                ImGui::ColorEdit4("#DotColour", config::visuals::esp::dotColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
 				ImGui::Checkbox("Name", &config::visuals::esp::name); SAMEL
 				COLOUR_SPACING SAMEL
 				ImGui::ColorEdit4("#NameColour", config::visuals::esp::nameColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 
+				ImGui::Checkbox("Health", &config::visuals::esp::health); 
+
+                ImGui::Checkbox("Distance", &config::visuals::esp::distance); SAMEL
+                COLOUR_SPACING SAMEL
+                ImGui::ColorEdit4("#DistanceColour", config::visuals::esp::distanceColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+                ImGui::SliderFloat("Distance Limit", &config::visuals::esp::distanceLimit, 0.0f, 3000.0f);
+
 				ImGui::Checkbox("Weapon", &config::visuals::esp::weapon); SAMEL
 				COLOUR_SPACING SAMEL
 				ImGui::ColorEdit4("#WeaponColour", config::visuals::esp::weaponColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+                ImGui::Checkbox("Ammo", &config::visuals::esp::ammo); SAMEL
+                COLOUR_SPACING SAMEL
+                ImGui::ColorEdit4("#AmmoColour", config::visuals::esp::ammoColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+                ImGui::Checkbox("Bomb", &config::visuals::esp::bomb); SAMEL
+                COLOUR_SPACING SAMEL
+                ImGui::ColorEdit4("#BombColour", config::visuals::esp::bombColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
+
+                ImGui::Checkbox("Armor", &config::visuals::esp::armor); SAMEL
+                COLOUR_SPACING SAMEL
+                ImGui::ColorEdit4("#ArmorColour", config::visuals::esp::armorColour, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_NoLabel);
 				
 				ImGui::Checkbox("Skeleton", &config::visuals::esp::skeleton); SAMEL
 				COLOUR_SPACING SAMEL

@@ -64,13 +64,29 @@ namespace config {
 			extern bool box;
 			extern float boxColour[4];
 
+			extern bool dot;
+			extern float dotColour[4];
+
 			extern bool name;
 			extern float nameColour[4];
 			
 			extern bool health;
 
+			extern bool distance;
+			extern float distanceColour[4];
+			extern float distanceLimit;
+
 			extern bool weapon;
 			extern float weaponColour[4];
+
+			extern bool ammo;
+			extern float ammoColour[4];
+
+			extern bool bomb;
+			extern float bombColour[4];
+
+			extern bool armor;
+			extern float armorColour[4];
 
 			extern bool skeleton;
 			extern float skeletonColour[4];
