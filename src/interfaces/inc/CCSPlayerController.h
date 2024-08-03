@@ -9,7 +9,8 @@
 
 class CCSPlayerController: public C_BaseEntity
 {
-
+public:
+    int m_hPlayerPawn();
 };
 
 

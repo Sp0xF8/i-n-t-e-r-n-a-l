@@ -7,6 +7,7 @@
 class CGameSceneNode: public ClassBase
  {
     
+public:
     Vector3 getVecOrigin();
     
 };

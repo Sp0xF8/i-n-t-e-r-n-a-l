@@ -1,8 +1,7 @@
 #pragma once
 
 #include <ClassBase.h>
-
-#include <CBodyComponent.h>
+#include <vectors.h>
 
 
 class C_BaseEntity: public ClassBase
@@ -12,7 +11,8 @@ public:
 
 
     int getPlayerHealth();
-    CBodyComponent getBodyComponent();
+    Vector3 getPosition();
+    int getTeam();
 
 
     uintptr_t* getPointer() { return address; }

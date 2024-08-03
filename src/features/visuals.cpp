@@ -7,6 +7,9 @@
 #include <client_dll.hpp>
 #include <imgui.h>
 
+
+#include <CHandle.h>
+
 #include <GPointers.h>
 // #include <C_BaseEntity.h>
 #include <C_CSPlayerPawn.h>
@@ -83,12 +86,22 @@ void visuals::run(){
 	// }
 	// Vector3 localPos = *reinterpret_cast<Vector3*>(gameNode + client_dll::CGameSceneNode::m_vecOrigin);
 
-	// Vector3 localPos = localPlayerPawn->getBodyComponent()->getGameSceneNode()->getVecOrigin();
+	if (playerHealth < 1 || playerHealth > 100){
+		return;
+	}
+
+	Vector3 localPos = localPlayerPawn->getPosition();
+
 
 	// int localTeam =  *reinterpret_cast<int*>(localPlayerPawn + client_dll::C_BaseEntity::m_iTeamNum);
 
+	int localTeam = localPlayerPawn->getTeam();
+
+	//check localPos is a Vector3 or another objct
+	// printf("Local Player Position: %p \n", localPos);
+
 	// //print local player pos
-	// printf("Local Player Position: %f %f %f \n", localPos.x, localPos.y, localPos.z);
+	printf("Local Player Position: %f %f %f \n", localPos.x, localPos.y, localPos.z);
 
 	
 
@@ -112,22 +125,31 @@ void visuals::run(){
 
 	// view_matrix_t viewMatrix = *(view_matrix_t*)(data::client_dll + offsets::client_dll::dwViewMatrix);
 
-	// for (int i = 0; i < 64; i++){
+	CHandler::setList();
 
-	// 	uintptr_t entityController = *(uintptr_t*)(listEntry + (120) * (i & 0x1FF));
-	// 	if(!entityController){
-	// 		continue;
-	// 	}
+	for (int i = 0; i < 64; i++){
+																/////// FUNCTION RETURNING 0x0000000000000000, fix in morning 
+		CCSPlayerController* playerController = CHandler::GetEntityFromHandle<CCSPlayerController*>(i);
+		DLOG("Entity %p", playerController);
+		if(!playerController){
+			continue;
+		}
 
-	// 	uintptr_t entityControllerPawn = *(uintptr_t*)(entityController + client_dll::CCSPlayerController::m_hPlayerPawn);
-	// 	if(!entityControllerPawn){
-	// 		continue;
-	// 	}
+		int playerPawnHandle = playerController->m_hPlayerPawn();
+		if(!playerPawnHandle){
+			continue;
+		}
 
-	// 	uintptr_t entityPawn = *(uintptr_t*)(listEntry + (120) * (entityControllerPawn & 0x1FF));
-	// 	if(!entityPawn){
-	// 		continue;
-	// 	}
+		C_CSPlayerPawn* playerPawn = CHandler::GetEntityFromHandle<C_CSPlayerPawn*>(playerPawnHandle);
+		DLOG("Pawn %p", playerPawn);
+		if(!playerPawn){
+			continue;
+		}
+		DLOG("----------------");
+		DLOG("Player Controller %d @ %p", i, playerController->getAddress());
+		DLOG("Player Pawn %d @ %p", i, playerPawn->getAddress());
+
+	}
 
 	// 	int teamnum = *reinterpret_cast<int*>(entityPawn + client_dll::C_BaseEntity::m_iTeamNum);
 
