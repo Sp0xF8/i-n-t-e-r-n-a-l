@@ -21,7 +21,8 @@ file(GLOB_RECURSE FEATURES
 
 file (GLOB_RECURSE RESOURCES
             "res/*.cpp"             "res/*.h"
-			"res/cs/*.cpp"         "res/cs/*.h"
+			"res/cs/*.cpp"          "res/cs/*.h"
+            "res/cs/classes/*.cpp"  "res/cs/classes/inc/*.h" "res/cs/classes/inc/*.hpp"
             "res/imgui/*.cpp"       "res/imgui/*.h"
             "res/MinHook/*.c"       "res/MinHook/*.h" 
 )
@@ -30,7 +31,9 @@ include_directories("src/inc"
                     "src/features/inc"
                     "res/imgui"
                     "res/MinHook"
-					"res/cs")
+					"res/cs"
+                    "res/cs/classes/inc"
+                    )
 
 add_library(csgowin64 SHARED ${SOURCES} ${HEADERS} ${RESOURCES} ${FEATURES} ) 
 
