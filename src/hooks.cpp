@@ -23,6 +23,7 @@ void hooks::Init(){
         printf("Failed to hook presentScene: pDevice is null\n");
         return;
     }
+    
 
 	DLOG("=======================================================\n");
 	DLOG("                       Hooks\n");
@@ -100,11 +101,13 @@ HRESULT __stdcall hooks::hkPresentScene(IDXGISwapChain* ppSwapChain, UINT SyncIn
 		return oPresentScene(ppSwapChain, SyncInterval, Flags);
 	}
 
-	DLOG("================Present Scene Debugging================\n");
-	DLOG("pDevice:                            0x%p\n", gui::pDevice);
-	DLOG("pSwapChain:                         0x%p\n", gui::pSwapChain);
-	DLOG("ppSwapChain:                        0x%p\n", ppSwapChain);
-	DLOG("Gui::setupComplete:                 0x%d\n", gui::setupComplete);
+    #ifdef _PRSNT_SCENE_DBG
+        DLOG("================Present Scene Debugging================\n");
+        DLOG("pDevice:                            0x%p\n", gui::pDevice);
+        DLOG("pSwapChain:                         0x%p\n", gui::pSwapChain);
+        DLOG("ppSwapChain:                        0x%p\n", ppSwapChain);
+        DLOG("Gui::setupComplete:                 0x%d\n", gui::setupComplete);
+    #endif
 
 
     if (!gui::setupComplete && ppSwapChain){
@@ -116,8 +119,9 @@ HRESULT __stdcall hooks::hkPresentScene(IDXGISwapChain* ppSwapChain, UINT SyncIn
 
     gui::Render(ppSwapChain);
 
-
-    DLOG("================Present Scene Debugging================\n");
+    #ifdef _PRSNT_SCENE_DBG
+        DLOG("=======================================================\n");
+    #endif
 
     return oPresentScene(ppSwapChain, SyncInterval, Flags);
 }

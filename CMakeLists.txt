@@ -18,6 +18,11 @@ file(GLOB_RECURSE FEATURES
 
 )
 
+file(GLOB_RECURSE INTERFACES_UTIL
+            "src/interfaces/*.cpp"       "src/interfaces/inc/*.h"
+            "src/util/*.cpp"             "src/util/inc/*.h"
+)
+
 
 file (GLOB_RECURSE RESOURCES
             "res/*.cpp"             "res/*.h"
@@ -28,11 +33,14 @@ file (GLOB_RECURSE RESOURCES
 
 include_directories("src/inc"
                     "src/features/inc"
+                    "src/interfaces/inc"
+                    "src/util/inc"
                     "res/imgui"
                     "res/MinHook"
-					"res/cs")
+					"res/cs"
+                    )
 
-add_library(csgowin64 SHARED ${SOURCES} ${HEADERS} ${RESOURCES} ${FEATURES} ) 
+add_library(csgowin64 SHARED ${SOURCES} ${HEADERS} ${RESOURCES} ${FEATURES} ${INTERFACES_UTIL} ) 
 
 target_link_libraries(csgowin64 dwmapi.lib d3d11.lib)
 
