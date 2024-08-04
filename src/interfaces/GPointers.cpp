@@ -17,6 +17,10 @@ void GPointers::init(){
     ViewMatrix = Pointer<uintptr_t>(this->Client_dll.GetAddress() + offsets::client_dll::dwViewMatrix, "View Matrix");
 };
 
+void GPointers::updateEntityList(){
+    EntityList = Pointer<uintptr_t>(this->Client_dll.GetAddress() + offsets::client_dll::dwEntityList, "Entity List");
+};
+
 GPointers::~GPointers(){
     delete EntityList;
     delete LocalPlayerController;

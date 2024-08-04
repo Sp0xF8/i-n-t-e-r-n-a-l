@@ -34,6 +34,9 @@ public:
     //get address
     T GetAddress() { return m_address; }
 
+    //get pointer
+    T GetPointer() { return *reinterpret_cast<T*>(m_address); }
+
 
     //addition operator
     Pointer offset(int offset) { return Pointer(m_address + offset); }

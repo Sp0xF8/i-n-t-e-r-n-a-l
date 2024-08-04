@@ -109,45 +109,68 @@ void visuals::run(){
 	printf("Health: %d \n", playerHealth);
 
 
-	// uintptr_t EntityList = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwEntityList);
-	// printf("Entity List: %p \n", EntityList);
+	uintptr_t EntityList = *(uintptr_t*)((uintptr_t)gPointers.Client_dll.GetAddress() + offsets::client_dll::dwEntityList);
+	printf("Entity List: %p \n", EntityList);
 
-	// if(!EntityList){
-	// 	return;
-	// }
+	if(!EntityList){
+		return;
+	}
 
-	// uintptr_t listEntry = *(uintptr_t*)(EntityList + ((8 * (42 & 0x7FFF) >> 9) + 16));
-	// 	printf("Entity: %p \n", listEntry);
+	uintptr_t listEntry = *(uintptr_t*)(EntityList + ((8 * (42 & 0x7FFF) >> 9) + 16));
+		printf("Entity: %p \n", listEntry);
 
-	// if(!listEntry){
-	// 	return;
-	// }
+	if(!listEntry){
+		return;
+	}
 
 	// view_matrix_t viewMatrix = *(view_matrix_t*)(data::client_dll + offsets::client_dll::dwViewMatrix);
 
-	CHandler::setList();
-
 	for (int i = 0; i < 64; i++){
+
+		uintptr_t entityController = *(uintptr_t*)(listEntry + (120) * (i & 0x1FF));
+		if(!entityController){
+			continue;
+		}
+
+		uintptr_t entityControllerPawn = *(uintptr_t*)(entityController + client_dll::CCSPlayerController::m_hPlayerPawn);
+		if(!entityControllerPawn){
+			continue;
+		}
+
+		uintptr_t entityPawn = *(uintptr_t*)(listEntry + (120) * (entityControllerPawn & 0x1FF));
+		if(!entityPawn){
+			continue;
+		}
+
+		DLOG("---------------------------------------- \n");
+		DLOG("Player Found %d \n", i);
+		//log pointers
+		DLOG("Entity Controller %d @ %p \n", i, entityController);
+		DLOG("Entity Controller Pawn %d @ %p \n", i, entityControllerPawn);
+		DLOG("Entity Pawn %d @ %p \n", i, entityPawn);
+		
+		
+		
 																/////// FUNCTION RETURNING 0x0000000000000000, fix in morning 
-		CCSPlayerController* playerController = CHandler::GetEntityFromHandle<CCSPlayerController*>(i);
-		DLOG("Entity %p", playerController);
-		if(!playerController){
-			continue;
-		}
+		// uintptr_t playerController = CHandler::GetEntityFromHandle(i);
+		// DLOG("Entity %p\n", playerController);
+		// if(!playerController){
+		// 	continue;
+		// }
 
-		int playerPawnHandle = playerController->m_hPlayerPawn();
-		if(!playerPawnHandle){
-			continue;
-		}
+		// int playerPawnHandle = *(int*)(playerController + client_dll::CCSPlayerController::m_hPlayerPawn);
+		// if(!playerPawnHandle){
+		// 	continue;
+		// }
 
-		C_CSPlayerPawn* playerPawn = CHandler::GetEntityFromHandle<C_CSPlayerPawn*>(playerPawnHandle);
-		DLOG("Pawn %p", playerPawn);
-		if(!playerPawn){
-			continue;
-		}
-		DLOG("----------------");
-		DLOG("Player Controller %d @ %p", i, playerController->getAddress());
-		DLOG("Player Pawn %d @ %p", i, playerPawn->getAddress());
+		// C_CSPlayerPawn* playerPawn = CHandler::GetEntityFromHandle<C_CSPlayerPawn*>(playerPawnHandle);
+		// DLOG("Pawn %p", playerPawn);
+		// if(!playerPawn){
+		// 	continue;
+		// }
+		// DLOG("----------------");
+		// DLOG("Player Controller %d @ %p", i, playerController->getAddress());
+		// DLOG("Player Pawn %d @ %p", i, playerPawn->getAddress());
 
 	}
 

@@ -11,8 +11,8 @@ namespace CHandler
     void setList();
 
     // get base entity from entity handle
-    template <typename T>
-    T GetEntityFromHandle(int handle);
+    // template <typename T>
+    uintptr_t GetEntityFromHandle(int handle);
 
 
     // auto Get(int iHandle) const { return reinterpret_cast<T *>(this.GetEntityFromHandle(iHandle)); }
