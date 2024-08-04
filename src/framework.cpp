@@ -5,14 +5,10 @@
 #include <defines.h>
 #include <offsets.h>
 #include <string>
-#include <legitbot.h>
-
 
 
 namespace framework {
 	bool exit = false;
-
-	std::thread legitbot_thread;
 
 }
 
@@ -21,12 +17,15 @@ namespace framework {
 
 bool framework::Init() {
     
+	// hook inputs from winapi
     gui::HookInput();
+	//create device / swapchain
     gui::Init();
 
+	//create hooks pertaining to ingame / rendering functions
     hooks::Init();
 
-
+	//setup data
 	data::setup();
 
 
@@ -42,16 +41,18 @@ bool framework::Init() {
 	gui::windowHeight = *(int*)(data::engine2_dll + offsets::engine2_dll::dwWindowHeight);
 	gui::windowWidth = *(int*)(data::engine2_dll + offsets::engine2_dll::dwWindowWidth);
 
-	if(buildNumber != data::latestBuildNumber){
+	if(buildNumber != offsets::game_info::buildNumber){
 		DLOG("=======================================================\n");
 		DLOG("                     Build Mismatch\n");
 		DLOG("=======================================================\n");
 		DLOG("Current Build: %p\n", buildNumber);
-		DLOG("Latest Build: %d\n", data::latestBuildNumber);
+		DLOG("Latest Build: %d\n", offsets::game_info::buildNumber);
 		DLOG("=======================================================\n");
-		//MessageBoxA(NULL, "Build Mismatch", "Error", MB_OK);
+		MessageBoxA(NULL, "Build Mismatch", "Error", MB_OK);
 		return false;
 	}
+
+	DBOX("Build Matches", "info");
 
 	DLOG("=======================================================\n");
 	DLOG("                     Setup Complete\n");
@@ -64,17 +65,11 @@ bool framework::Init() {
 	DLOG("=======================================================\n");
 
 
-	legitbot_thread = std::thread(legitbot::run);
-
-	
-
 	return true;
 
 }
 
 void framework::Destroy() {
-
-	legitbot_thread.join();
 
 	hooks::Destroy();
 	gui::Destroy();

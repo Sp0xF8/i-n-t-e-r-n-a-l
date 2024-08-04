@@ -80,9 +80,9 @@ void MainThread(const HMODULE dllHandle){
 		FreeConsole();
 	#endif
 
+    MessageBox(nullptr, "Unloaded", "Info", MB_OK);
 
 	FreeLibraryAndExitThread(dllHandle, 0);
-    MessageBox(nullptr, "Unloaded", "Info", MB_OK);
     
 }
 

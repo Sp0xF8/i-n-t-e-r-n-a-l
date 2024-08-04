@@ -5,8 +5,6 @@
 
 #include <framework.h>
 
-#include <playerlist.h>
-
 
 void* hooks::GetVFunc(void* thisptr, size_t index) {
 	return (*static_cast<void***>(thisptr))[index];
@@ -116,31 +114,8 @@ HRESULT __stdcall hooks::hkPresentScene(IDXGISwapChain* ppSwapChain, UINT SyncIn
 		return oPresentScene(ppSwapChain, SyncInterval, Flags);
 	}
 
-	if (data::gameType->m_sMapName[0] == '<') {
-		DLOG("Not in a map\n");
-		//DLOG("Map: %s\n", data::gameType.m_sMapName);
-		playerlist::scrapPlayers();
-	} else {
-		DLOG("In a map\n");
-		//DLOG("Map: %s\n", data::gameType.m_sMapName);
-		playerlist::updatePlayers();
-	}
-
-
-	
-
-
-	
-    // if(config::menu::isOpen){
-    //     #ifdef _DEBUG_ALL
-    //         printf("Gui::isOpen\n");
-    //     #endif
     gui::Render(ppSwapChain);
-    // }
 
-	
-
-    
 
     DLOG("================Present Scene Debugging================\n");
 

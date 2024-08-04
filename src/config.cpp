@@ -57,20 +57,36 @@ namespace config {
     }
 
     namespace visuals{
-        bool enabled = true;
+        bool enabled = false;
 
 		bool drawTeam = false;
         namespace esp {
             bool box = false;
             float boxColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
 
+			bool dot = false;
+			float dotColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
+
             bool name = false;
             float nameColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
 
             bool health = false;
 
+			bool distance = false;
+			float distanceColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
+			float distanceLimit = 1000.0f;
+			
 			bool weapon = false;
 			float weaponColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
+
+			bool ammo = false;
+			float ammoColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
+
+			bool bomb = false;
+			float bombColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
+
+			bool armor = false;
+			float armorColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
 
 			bool skeleton = false;
 			float skeletonColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };
@@ -101,5 +117,10 @@ namespace config {
 
 		}
 
+	}
+
+	namespace misc {
+		bool enabled = false;
+		bool bunnyhop = false;
 	}
 }

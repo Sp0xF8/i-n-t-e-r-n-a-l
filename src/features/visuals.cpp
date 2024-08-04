@@ -1,9 +1,11 @@
 #include <visuals.h>
-#include <playerlist.h>
 #include <config.h>
 #include <draw.h>
 #include <gui.h>
 #include <data.h>
+#include <offsets.h>
+#include <client_dll.hpp>
+#include <imgui.h>
 
 // Vector3 WorldToScreen(const Vector3 vecOrigin, view_matrix_t matrix)
 // {
@@ -52,243 +54,224 @@ void visuals::run(){
 		return;
 	}
 
-	if(!playerlist::setupcomplete){
+	uintptr_t localPlayer = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwLocalPlayerController);
+	printf("Entry found: %p \n", localPlayer);
+
+
+	if(!localPlayer){
 		return;
 	}
 
-	// DLOG("Running visuals\n");
+	uintptr_t  localPlayerPawn = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwLocalPlayerPawn);
+	printf("local Pawn: %p \n", localPlayerPawn);
+
+	if(!localPlayerPawn){
+		return;
+	}
+
+	int playerHealth = *reinterpret_cast<int*>(localPlayerPawn + client_dll::C_BaseEntity::m_iHealth);
+
+	//get local player pos for distance calc
+	uintptr_t gameNode = *(uintptr_t*)(localPlayerPawn + client_dll::C_BaseEntity::m_pGameSceneNode);
+	if(!gameNode){
+		return;
+	}
+	Vector3 localPos = *reinterpret_cast<Vector3*>(gameNode + client_dll::CGameSceneNode::m_vecOrigin);
+
+	int localTeam =  *reinterpret_cast<int*>(localPlayerPawn + client_dll::C_BaseEntity::m_iTeamNum);
+
 	
-	// DLOG("viewMatrix: %p\n", playerlist::viewMatrix);
-	// DLOG("viewMatrix[0][0]: %f\n", playerlist::viewMatrix.matrix[0][0]);
-	
-	for (int i = 0; i < 32; i++) {
 
-		DLOG("====================================\n");
-		DLOG("Running visuals for player %d\n", i);
-		
+	//print health
+	printf("Health: %d \n", playerHealth);
 
-		DLOG("playerlist::players[i].controller: %p\n", playerlist::players[i].controller);
-		DLOG("playerlist::players[i].pawn: %p\n", playerlist::players[i].pawn);
 
-		DLOG("Player %d : %s\n", i, playerlist::players[i].Active() ? "active" : "inactive");
-		if (!playerlist::players[i].Active()) {
+	uintptr_t EntityList = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwEntityList);
+	printf("Entity List: %p \n", EntityList);
+
+	if(!EntityList){
+		return;
+	}
+
+	uintptr_t listEntry = *(uintptr_t*)(EntityList + ((8 * (42 & 0x7FFF) >> 9) + 16));
+		printf("Entity: %p \n", listEntry);
+
+	if(!listEntry){
+		return;
+	}
+
+	view_matrix_t viewMatrix = *(view_matrix_t*)(data::client_dll + offsets::client_dll::dwViewMatrix);
+
+	for (int i = 0; i < 64; i++){
+
+		uintptr_t entityController = *(uintptr_t*)(listEntry + (120) * (i & 0x1FF));
+		if(!entityController){
+			continue;
+		}
+
+		uintptr_t entityControllerPawn = *(uintptr_t*)(entityController + client_dll::CCSPlayerController::m_hPlayerPawn);
+		if(!entityControllerPawn){
+			continue;
+		}
+
+		uintptr_t entityPawn = *(uintptr_t*)(listEntry + (120) * (entityControllerPawn & 0x1FF));
+		if(!entityPawn){
+			continue;
+		}
+
+		int teamnum = *reinterpret_cast<int*>(entityPawn + client_dll::C_BaseEntity::m_iTeamNum);
+
+		if(!config::visuals::drawTeam && teamnum == localTeam){
 			continue;
 		}
 
 
-		if(!config::visuals::drawTeam){
-			if(playerlist::players[i].controller->m_iTeamNum == playerlist::localPlayer.controller->m_iTeamNum){
+		int pHealth = *reinterpret_cast<int*>(entityPawn + client_dll::C_BaseEntity::m_iHealth);
 
-				DLOG("Player %d is on the same team\n", i);
-				continue;
-			} else {
-				DLOG("Player %d is on the other team\n", i);
+		if(pHealth < 1){
+			continue;
+		}
+
+		DLOG("========================================================\n");
+		DLOG("Entity Controller: %p \n", entityController);
+		DLOG("Entity Controller Pawn: %p \n", entityControllerPawn);
+		DLOG("Entity Pawn: %p \n", entityPawn);
+		DLOG("--------------------------------------------------------\n");
+		DLOG("Player %p Health : %d \n", entityPawn, pHealth);
+
+
+		uintptr_t gameNode = *(uintptr_t*)(entityPawn + client_dll::C_BaseEntity::m_pGameSceneNode);
+		if(!gameNode){
+			continue;
+		}
+
+		Vector3 pos = *reinterpret_cast<Vector3*>(gameNode + client_dll::CGameSceneNode::m_vecOrigin);
+		DLOG("Position: %f %f %f \n", pos.x, pos.y, pos.z);
+
+		//add dot to draw list
+		Vector3 screenPos = WorldToScreen(pos, viewMatrix);
+
+		if (config::visuals::esp::dot) {
+
+			if(screenPos.x != -1 && screenPos.y != -1){
+				//void ImDrawList::AddCircle(const ImVec2& center, float radius, ImU32 col, int num_segments, float thickness)
+				// ImGui::GetBackgroundDrawList()->AddCircle(ImVec2(screenPos.x, screenPos.y), 5, ImColor(255, 255, 255, 255), 4, 3);
+				Draw::Circle(Vector2(screenPos.x,screenPos.y), 5, FromFloatToColour(config::visuals::esp::dotColour), 3, 4 );
+				
 			}
 		}
 
 
-
-		if(playerlist::players[i].pawn == playerlist::localPlayer.pawn){
-			DLOG("Player %d is the LOCAL PLAYER\n", i);
-			//continue;
-		}
-
-		DLOG("playerlist::players[i].pawn->m_iIDEntIndex: %d\n", playerlist::players[i].pawn->m_iIDEntIndex);
-
-		DLOG("m_pClasstype %d: %p\n", i, playerlist::players[i].pawn->m_pClassType);
-		DLOG("m_pClasstype& %d: %p\n", i, &playerlist::players[i].pawn->m_pClassType);
-
-		DLOG("localPlayer.m_pClasstype: %p\n", playerlist::localPlayer.pawn->m_pClassType);
-		DLOG("localPlayer.m_pClasstype&: %p\n", &playerlist::localPlayer.pawn->m_pClassType);
-
-
-		if(playerlist::players[i].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-			DLOG("ptr %d is not the same class as the local player\n", i);
+		if (config::visuals::esp::health) {
 			
-		} else {
-			DLOG("ptr %d is the same class as the local player\n", i);
+			float health_perc = pHealth/100;
+			Colour healthColour;
+			if(health_perc > 0.75) {
+				healthColour = {0.0700, 1.00, 0.256, 1.0};
+			} else if (health_perc > 0.25) {
+				healthColour = {0.920, 0.665, 0.156, 1.0 };
+			} else {
+				healthColour = {0.820, 0.303, 0.321, 1.0};
+			}
+
+			int barSize = pHealth;
+
+			Draw::RectFilled(Vector2(screenPos.x - barSize/2 +2, screenPos.y + 8), Vector2(screenPos.x + barSize/2 +2, screenPos.y + 17), {0.0f, 0.0f, 0.0f, 1.0f});
+			Draw::RectFilled(Vector2(screenPos.x - barSize/2, screenPos.y + 10), Vector2(screenPos.x + barSize/2, screenPos.y + 15), healthColour);
+		}
+
+		if (config::visuals::esp::distance){
+
+			Vector3 Distance = localPos - pos;
+
+			float distance = sqrt(Distance.x * Distance.x + Distance.y * Distance.y + Distance.z * Distance.z);
+			if(distance < config::visuals::esp::distanceLimit){
+				char buffer[256];
+				sprintf(buffer, "Distance: %f", distance);
+				Draw::Text(Vector2(screenPos.x, screenPos.y + 30), buffer, FromFloatToColour(config::visuals::esp::distanceColour), true);
+			}
+		}
+
+		if (config::visuals::esp::name) {
+
+			uintptr_t player_name = *reinterpret_cast<uintptr_t*>(entityController + client_dll::CCSPlayerController::m_sSanitizedPlayerName);
+			if(player_name){
+				char buffer[256];
+				sprintf(buffer, "Name: %s", (char*)player_name);
+				Draw::Text(Vector2(screenPos.x, screenPos.y - 40), buffer, FromFloatToColour(config::visuals::esp::nameColour), true);
+			}
 		}
 
 
-		if(playerlist::players[i].pawn->m_iHealth <= 0){
-			DLOG("Player %d is dead\n", i);
-			continue;
-		} else {
-			DLOG("Player %d is alive : %d\n", i, playerlist::players[i].pawn->m_iHealth);
-		}
+		// if (config::visuals::esp::ammo) {
+			
+		// 	uintptr_t weaponServices = *reinterpret_cast<uintptr_t*>(entityPawn + client_dll::C_BasePlayerPawn::m_pWeaponServices);
+
+		// 	// CHandle<uintptr_t> activeWeapon = *reinterpret_cast<CHandle<uintptr_t>*>(weaponServices + client_dll::CPlayer_WeaponServices::m_hActiveWeapon);
+
+		// 	// if(activeWeapon.Get()){
+		// 	// 	uintptr_t* weapon = activeWeapon.Get();
+		// 	// 	uintptr_t weaponAmmo = *reinterpret_cast<uintptr_t*>(weapon + client_dll::C_BasePlayerWeapon::m_iClip1);
+		// 	// 	if(weaponAmmo){
+		// 	// 		char buffer[256];
+		// 	// 		sprintf(buffer, "Ammo: %s", (char*)weaponAmmo);
+		// 	// 		Draw::Text(Vector2(screenPos.x, screenPos.y - 50), buffer, FromFloatToColour(config::visuals::esp::ammoColour), true);
+		// 	// 	}
+		// 	// }
+
+		// 	//        constexpr std::ptrdiff_t m_iAmmo = 0x60; // uint16[32]
+
+		// 	UINT16 ammo[32] = *reinterpret_cast<UINT16*>			
+
+		// }
+
 
 		
-
-
-		if(config::visuals::esp::skeleton){
-			skeleton_esp(i);
-		}
-
-		if(config::visuals::esp::name){
-			name_esp(i);
-		}
-
-		if(config::visuals::esp::health){
-			health_esp(i);
-		}
+		
+		
 
 	}
 
-	
+	// if (config::visuals::esp::bomb) {
+
+	// 	uintptr_t wbomb = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwWeaponC4);
+	// 	if (wbomb) {
+	// 	printf("Weapon C4: %p", wbomb);
+	// 	}
+
+	// 	uintptr_t pbomb = *(uintptr_t*)(data::client_dll + offsets::client_dll::dwPlantedC4);
+	// 	if (pbomb) {
+	// 	printf("Planted C4: %p", pbomb);
+	// 	}
 
 
+	// 	// if(bomb){
+	// 	// 	uintptr_t bombNode = *(uintptr_t*)(bomb + client_dll::C_BaseEntity::m_pGameSceneNode);
+	// 	// 	if (!bombNode) {
+	// 	// 		return;
+	// 	// 	}
 
-}
-
-
-
-
-
-
-enum boneids : int {
-	HEAD = 6,
-	NECK = 5,
-	SPINE = 4,
-	SPINE_BOTTOM = 2,
-	LEFT_SHOULDER = 8,
-	LEFT_ELBOW = 9,
-	LEFT_HAND = 11,
-	RIGHT_SHOULDER = 13,
-	RIGHT_ELBOW = 14,
-	RIGHT_HAND = 16,
-	LEFT_HIP = 22,
-	LEFT_KNEE = 23,
-	LEFT_FOOT = 24,
-	RIGHT_HIP = 25,
-	RIGHT_KNEE = 26,
-	RIGHT_FOOT = 27
-};
-
-struct bone_connection {
-	int bone1;
-	int bone2;
-
-	bone_connection(int bone1, int bone2) : bone1(bone1), bone2(bone2) { }
-};
-
-bone_connection bone_connections[] = {
-	bone_connection(boneids::HEAD, boneids::NECK),
-	bone_connection(boneids::NECK, boneids::SPINE),
-	bone_connection(boneids::SPINE, boneids::SPINE_BOTTOM),
-	bone_connection(boneids::SPINE, boneids::LEFT_SHOULDER),
-	bone_connection(boneids::SPINE, boneids::RIGHT_SHOULDER),
-	bone_connection(boneids::LEFT_SHOULDER, boneids::LEFT_ELBOW),
-	bone_connection(boneids::LEFT_ELBOW, boneids::LEFT_HAND),
-	bone_connection(boneids::RIGHT_SHOULDER, boneids::RIGHT_ELBOW),
-	bone_connection(boneids::RIGHT_ELBOW, boneids::RIGHT_HAND),
-	bone_connection(boneids::SPINE_BOTTOM, boneids::LEFT_HIP),
-	bone_connection(boneids::LEFT_HIP, boneids::LEFT_KNEE),
-	bone_connection(boneids::LEFT_KNEE, boneids::LEFT_FOOT),
-	bone_connection(boneids::SPINE_BOTTOM, boneids::RIGHT_HIP),
-	bone_connection(boneids::RIGHT_HIP, boneids::RIGHT_KNEE),
-	bone_connection(boneids::RIGHT_KNEE, boneids::RIGHT_FOOT)
-};
-
-void visuals::skeleton_esp(int index){
-
-	if(!playerlist::players[index].Active()){
-		return;
-	}
+	// 	// 	// bool bombPlanted = *reinterpret_cast<bool*>(bomb + client_dll::C_C4::m_bBombPlanted);
+	// 	// 	// if(bombNode){
+	// 	// 	// 	Vector3 bombPos = *reinterpret_cast<Vector3*>(bombNode + client_dll::CGameSceneNode::m_vecOrigin);
+	// 	// 	// 	Vector3 screenPos = WorldToScreen(bombPos, viewMatrix);
+	// 	// 	// 	if(bombPlanted){
+	// 	// 	// 		// float timeLeft = *reinterpret_cast<float*>(bomb + client_dll::C_PlantedC4::m_flTimerLength);
 
 
+	// 	// 	// 		if(screenPos.x != -1 && screenPos.y != -1){
+	// 	// 	// 			char buffer[256];
+	// 	// 	// 			sprintf(buffer, "Bomb Planted");
+	// 	// 	// 			Draw::Text(Vector2(screenPos.x, screenPos.y - 20), buffer, FromFloatToColour(config::visuals::esp::bombColour), true);
+	// 	// 	// 			// sprintf(buffer, "Time Left: %f", timeLeft);
+	// 	// 	// 			// Draw::Text(Vector2(screenPos.x, screenPos.y), buffer, FromFloatToColour(config::visuals::esp::bombColour), true);
+	// 	// 	// 		}
+	// 	// 	// 	}
+	// 	// 	// }
+			
+	// 	// }
+			
+	// }
 
-	
-
-
-	for (int r = 0; r < sizeof(bone_connections) / sizeof(bone_connection); r++) {
-
-		if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-			continue;
-		}
-
-
-		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState == nullptr){
-			continue;
-		}
-
-		if(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix == NULL){
-			continue;
-		}
-		Vector3 bone1 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone1 * 0x20);
-		Vector3 bone2 = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + bone_connections[r].bone2 * 0x20);
-
-
-
-		Vector2 bone1_wts = WorldToScreen(bone1, playerlist::viewMatrix).to_vector2();
-		Vector2 bone2_wts = WorldToScreen(bone2, playerlist::viewMatrix).to_vector2();
-
-
-		Draw::Line(bone1_wts, bone2_wts, FromFloatToColour(config::visuals::esp::skeletonColour), 2);
-	}
-}
-
-
-void visuals::name_esp(int index){
-
-	if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-			return;
-		}
-
-	if(playerlist::players[index].controller->m_pClassType != playerlist::localPlayer.controller->m_pClassType){
-		return;
-	}
-
-
-	Vector3 feet = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
-	Vector2 feet_wts = WorldToScreen(feet, playerlist::viewMatrix).to_vector2();
-
-	Draw::Text(feet_wts, playerlist::players[index].controller->m_sSanitizedPlayerName, FromFloatToColour(config::visuals::esp::nameColour), true);
-
-
-}
-
-void visuals::health_esp(int index){
-
-	if(playerlist::players[index].pawn->m_pClassType != playerlist::localPlayer.pawn->m_pClassType){
-			return;
-		}
-
-
-	Vector3 bottom_of_bar = (Vector3)(playerlist::players[index].pawn->m_pGameSceneNode->m_vecOrigin);
-
-
-	Vector3 head = *(Vector3*)(playerlist::players[index].pawn->m_pGameSceneNode->m_pModelState->pBoneMatrix + boneids::HEAD * 0x20);
-
-	float height = bottom_of_bar.z - head.z;
-
-	
-
-	Vector3 top_of_bar = bottom_of_bar;
-	top_of_bar.z -= (height * ( playerlist::players[index].pawn->m_iHealth / 100.0f));
-
-
-
-	Vector2 bottom_of_bar_wts = WorldToScreen(bottom_of_bar, playerlist::viewMatrix).to_vector2();
-	Vector2 top_of_bar_wts = WorldToScreen(top_of_bar, playerlist::viewMatrix).to_vector2();
-
-
-	float radius = (bottom_of_bar_wts.y - top_of_bar_wts.y) / 3.0f;
-
-	bottom_of_bar_wts.x -= radius;
-	top_of_bar_wts.x -= radius;
-
-	Colour playerHealthColour = Colour(0.0f, 1.0f, 0.0f, 1.0f);
-
-	if (playerlist::players[index].pawn->m_iHealth < 75) {
-		playerHealthColour = Colour(1.0f, 1.0f, 0.0f, 1.0f);
-	}
-	else if (playerlist::players[index].pawn->m_iHealth < 50) {
-		playerHealthColour = Colour(1.0f, 0.5f, 0.0f, 1.0f);
-	}
-	else if (playerlist::players[index].pawn->m_iHealth < 30) {
-		playerHealthColour = Colour(1.0f, 0.0f, 0.0f, 1.0f);
-	}
-
-	Draw::Line(bottom_of_bar_wts, top_of_bar_wts, playerHealthColour, 2);
 
 }

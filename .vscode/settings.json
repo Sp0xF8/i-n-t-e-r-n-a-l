@@ -54,6 +54,7 @@
 		"xlocmon": "cpp",
 		"xlocnum": "cpp",
 		"xloctime": "cpp",
-		"vector": "cpp"
+		"vector": "cpp",
+		"xstddef": "cpp"
 	}
 }
