@@ -40,7 +40,7 @@ int C_BaseEntity::getPlayerHealth(){
             throw std::exception("C_CSPlayerPawn::getPlayerHealth() - this->address == 0");
         }
         
-        return *(int*)(getAddress() + client_dll::C_BaseEntity::m_iHealth);
+        return *(int*)((uintptr_t)getAddress() + client_dll::C_BaseEntity::m_iHealth);
         
     }
     catch(std::exception e){
@@ -59,7 +59,7 @@ int C_BaseEntity::getTeam(){
             throw std::exception("C_CSPlayerPawn::getTeam() - this->address == 0");
         }
         
-        return *(int*)(getAddress() + client_dll::C_BaseEntity::m_iTeamNum);
+        return *(int*)((uintptr_t)getAddress() + client_dll::C_BaseEntity::m_iTeamNum);
         
     }
     catch(std::exception e){

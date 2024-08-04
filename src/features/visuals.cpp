@@ -109,25 +109,27 @@ void visuals::run(){
 	printf("Health: %d \n", playerHealth);
 
 
-	uintptr_t EntityList = *(uintptr_t*)((uintptr_t)gPointers.Client_dll.GetAddress() + offsets::client_dll::dwEntityList);
-	printf("Entity List: %p \n", EntityList);
+	// uintptr_t EntityList = *(uintptr_t*)((uintptr_t)gPointers.Client_dll.GetAddress() + offsets::client_dll::dwEntityList);
+	// printf("wEntity List: %p \n", EntityList);
+	// printf("nEntityList: %p", gPointers.EntityList.GetAddress());
 
-	if(!EntityList){
-		return;
-	}
+	// if(!gPointers.EntityList.GetAddress()){
+	// 	return;
+	// }
 
-	uintptr_t listEntry = *(uintptr_t*)(EntityList + ((8 * (42 & 0x7FFF) >> 9) + 16));
-		printf("Entity: %p \n", listEntry);
+	// uintptr_t listEntry = *(uintptr_t*)(gPointers.EntityList.GetAddress() + ((8 * (42 & 0x7FFF) >> 9) + 16));
+	// 	printf("Entity: %p \n", listEntry);
 
-	if(!listEntry){
-		return;
-	}
+	// if(!listEntry){
+	// 	return;
+	// }
 
 	// view_matrix_t viewMatrix = *(view_matrix_t*)(data::client_dll + offsets::client_dll::dwViewMatrix);
+	CHandler::setList();
 
 	for (int i = 0; i < 64; i++){
 
-		uintptr_t entityController = *(uintptr_t*)(listEntry + (120) * (i & 0x1FF));
+		uintptr_t entityController = CHandler::GetEntityFromHandle(i);
 		if(!entityController){
 			continue;
 		}
@@ -137,7 +139,7 @@ void visuals::run(){
 			continue;
 		}
 
-		uintptr_t entityPawn = *(uintptr_t*)(listEntry + (120) * (entityControllerPawn & 0x1FF));
+		uintptr_t entityPawn = CHandler::GetEntityFromHandle(entityControllerPawn);
 		if(!entityPawn){
 			continue;
 		}
@@ -171,6 +173,14 @@ void visuals::run(){
 		// DLOG("----------------");
 		// DLOG("Player Controller %d @ %p", i, playerController->getAddress());
 		// DLOG("Player Pawn %d @ %p", i, playerPawn->getAddress());
+
+		C_CSPlayerPawn* playerPawn = (C_CSPlayerPawn*)entityPawn;
+		CCSPlayerController* playerController = (CCSPlayerController*)entityController;
+
+		int teamnum = playerPawn->getTeam();
+		DLOG("Team Number %d", teamnum);
+		int health = playerPawn->getPlayerHealth();
+		DLOG("Health %d", health);
 
 	}
 

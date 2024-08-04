@@ -13,7 +13,7 @@ namespace CHandler {
 
 void CHandler::setList(){
     CHandler::listEntry = *(uintptr_t*)(gPointers.EntityList.GetAddress() + ((8 * (42 & 0x7FFF) >> 9) + 16));
-    DLOG("Entity List: %p\n", listEntry);
+    DLOG("ListEntry: %p\n", listEntry);
     // DLOG("EntityList2: %p", *(uintptr_t*)(gPointers.EntityList.GetAddress() + ((8 * (42 & 0x7FFF) >> 9) + 16)));
 }
 
@@ -21,7 +21,7 @@ void CHandler::setList(){
 // template <typename T>
 uintptr_t CHandler::GetEntityFromHandle(int handle) {
 
-    DLOG("List Entry: %p \n", listEntry);
+    // DLOG("List Entry: %p \n", listEntry);
 
     if(!listEntry){
 		return 0;

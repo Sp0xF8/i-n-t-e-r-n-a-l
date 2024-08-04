@@ -32,14 +32,16 @@ public:
     Pointer& operator=(T address) { m_address = address; return *this; }
 
     //get address
-    T GetAddress() { return m_address; }
+    uintptr_t GetAddress() { return (uintptr_t)m_address; }
 
     //get pointer
     T GetPointer() { return *reinterpret_cast<T*>(m_address); }
 
 
     //addition operator
-    Pointer offset(int offset) { return Pointer(m_address + offset); }
+    // Pointer offset(int offset) { return Pointer((uintptr_t)m_address + offset); }
+
+    uintptr_t offset(int offset) { return *(uintptr_t*)((uintptr_t)m_address + offset);}
 
 private:
     T m_address;
