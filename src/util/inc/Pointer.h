@@ -6,43 +6,71 @@
 
 #define BROKEN_REFERENCE = 0xffffffff
 //T based pointer class
-template <typename T>
+
 class Pointer
 {
 public:
-    //constructor
-    Pointer(T address, const char* ptrName = "Pointer") : m_address(address) {DLOG("%s Created @   0x%p \n", ptrName, address);}
-    //no default constructor exists for class "Pointer<uintptr_t>" (aka "Pointer<unsigned long long>")C/C++(291)
-    Pointer() : m_address(0) {}
+    
+    Pointer(uintptr_t address, const char* name) {
+        m_address = address;
+        m_dereferenced = *(uintptr_t*)address;
+        DLOG("%s Created @ %p\n",name, m_address);
+        DLOG("%s Value @ %p\n", name, m_dereferenced);
+    }
 
-    //destructor
-    ~Pointer() {}
+    Pointer() {}
+    
+    
+    uintptr_t GetAddress() {
+        return m_address;
+    }
 
-    //dereference operator
-    T& operator*() { return *reinterpret_cast<T*>(m_address); }
+    template <typename T>
+    T GetAddress() {
+        return *(T*)m_address;
+    }
 
-    //member access operator
-    T* operator->() { return reinterpret_cast<T*>(m_address); }
+    uintptr_t getDereference() {
+        return m_dereferenced;
+    }
 
-    //cast operator
-    operator T*() { return reinterpret_cast<T*>(m_address); }
+    template <typename T>
+    T getDereference() {
+        return (T)m_dereferenced;
+    }
 
-    //no operator "=" matches these operandsC/C++(349)
-    //assignment operator
-    Pointer& operator=(T address) { m_address = address; return *this; }
+    //offset
+    uintptr_t operator+(uintptr_t offset) {
+        return m_address + offset;
+    }
 
-    //get address
-    uintptr_t GetAddress() { return (uintptr_t)m_address; }
+    //assignment 
+    void operator=(uintptr_t address) {
+        m_address = address;
+        m_dereferenced = *(uintptr_t*)address;
+        DLOG("Pointer found @ %p \n", m_address);
+        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
+    }
 
-    //get pointer
-    T GetPointer() { return *reinterpret_cast<T*>(m_address); }
+    // assignment via pointer
+    void operator=(Pointer* pointer) {
+        m_address = pointer->GetAddress();
+        m_dereferenced = pointer->getDereference();
+        DLOG("Pointer found @ %p \n", m_address);
+        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
+    }
 
+    // assignment via pointer
+    void operator=(Pointer pointer) {
+        m_address = pointer.GetAddress();
+        m_dereferenced = pointer.getDereference();
+        DLOG("Pointer found @ %p \n", m_address);
+        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
+    }
 
-    //addition operator
-    // Pointer offset(int offset) { return Pointer((uintptr_t)m_address + offset); }
-
-    uintptr_t offset(int offset) { return *(uintptr_t*)((uintptr_t)m_address + offset);}
 
 private:
-    T m_address;
+    uintptr_t m_address;
+    uintptr_t m_dereferenced;
 };
+

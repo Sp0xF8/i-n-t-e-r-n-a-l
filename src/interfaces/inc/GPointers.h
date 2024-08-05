@@ -7,22 +7,21 @@
 
 class GPointers {
 public:
-    Pointer<uintptr_t> Client_dll;
-    Pointer<uintptr_t> Engine_dll;
+    Pointer Client_dll;
+    Pointer Engine_dll;
 
-    Pointer<uintptr_t> EntityList;
-    Pointer<uintptr_t*> LocalPlayerController;
-    Pointer<uintptr_t*> LocalPlayerPawn;
-    Pointer<uintptr_t*> ViewMatrix;
+    Pointer EntityList;
+    Pointer LocalPlayerController;
+    Pointer LocalPlayerPawn;
+    Pointer ViewMatrix;
 
 
 
     // GPointers();
-    ~GPointers();
+    // ~GPointers();
 
 
     void init();
-    void updateEntityList();
 };
 
 //inline definition to access globally

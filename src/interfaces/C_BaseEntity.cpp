@@ -32,7 +32,7 @@
 #include <exception> // Add this line to include the <exception> header
 
 
-int C_BaseEntity::getPlayerHealth(){
+int C_BaseEntity::getHealth(){
     
     try{
 
@@ -40,7 +40,7 @@ int C_BaseEntity::getPlayerHealth(){
             throw std::exception("C_CSPlayerPawn::getPlayerHealth() - this->address == 0");
         }
         
-        return *(int*)((uintptr_t)getAddress() + client_dll::C_BaseEntity::m_iHealth);
+        return *(int*)(getDereference() + client_dll::C_BaseEntity::m_iHealth);
         
     }
     catch(std::exception e){
@@ -59,7 +59,7 @@ int C_BaseEntity::getTeam(){
             throw std::exception("C_CSPlayerPawn::getTeam() - this->address == 0");
         }
         
-        return *(int*)((uintptr_t)getAddress() + client_dll::C_BaseEntity::m_iTeamNum);
+        return *(int*)(getDereference() + client_dll::C_BaseEntity::m_iTeamNum);
         
     }
     catch(std::exception e){
@@ -69,27 +69,27 @@ int C_BaseEntity::getTeam(){
 
 }
 
-Vector3 C_BaseEntity::getPosition(){
+// Vector3 C_BaseEntity::getPosition(){
     
-    try{
+//     try{
 
-        if(this == 0){
-            throw std::exception("C_CSPlayerPawn::getBodyComponent() - this->address == 0");
-        }
+//         if(this == 0){
+//             throw std::exception("C_CSPlayerPawn::getBodyComponent() - this->address == 0");
+//         }
 
-        uintptr_t CGameSceneNodeAddress = *(uintptr_t*)(getAddress() + client_dll::C_BaseEntity::m_pGameSceneNode);
-        if(CGameSceneNodeAddress == 0){
-            throw std::exception("C_CSPlayerPawn::getBodyComponent() - CGameSceneNodeAddress == 0");
-        }
+//         uintptr_t CGameSceneNodeAddress = *(uintptr_t*)(getAddress() + client_dll::C_BaseEntity::m_pGameSceneNode);
+//         if(CGameSceneNodeAddress == 0){
+//             throw std::exception("C_CSPlayerPawn::getBodyComponent() - CGameSceneNodeAddress == 0");
+//         }
 
-        return *(Vector3*)(CGameSceneNodeAddress + client_dll::CGameSceneNode::m_vecOrigin);
+//         return *(Vector3*)(CGameSceneNodeAddress + client_dll::CGameSceneNode::m_vecOrigin);
         
         
-    }
-    catch(std::exception e){
-        printf("%s\n", e.what());
-        Vector3 FalseVec = {0,0,0};
-        return FalseVec;
-    }
+//     }
+//     catch(std::exception e){
+//         printf("%s\n", e.what());
+//         Vector3 FalseVec = {0,0,0};
+//         return FalseVec;
+//     }
 
-}
+// }
