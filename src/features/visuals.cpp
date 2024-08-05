@@ -41,7 +41,7 @@ void visuals::run(){
 		return;
 	}
 
-	Pointer localPawn = gPointers.LocalPlayerPawn;
+	C_CSPlayerPawn localPawn = gPointers.LocalPlayerPawn;
 	Pointer localController = gPointers.LocalPlayerController;
 
 	// int health = localPawn.getHealth();
@@ -52,8 +52,10 @@ void visuals::run(){
 
 	int health = localPawn.getDereference() + client_dll::C_BaseEntity::m_iHealth;
 	int health2 = *(int*)(localPawn.getDereference() + client_dll::C_BaseEntity::m_iHealth);
+	int health3 = localPawn.getHealth();
 
-	DLOG("Health: %d", health);
-	DLOG("Health2: %d", health2);
+	DLOG("Health1: %d\n", health);
+	DLOG("Health2: %d\n", health2);
+	DLOG("Health3: %d\n", health3);
 
 }

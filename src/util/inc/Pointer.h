@@ -19,6 +19,15 @@ public:
     }
 
     Pointer() {}
+
+    //handle C_BaseEntity(Pointer* pointer) : Pointer(pointer) {}
+    Pointer(Pointer* pointer) {
+        m_address = pointer->GetAddress();
+        m_dereferenced = pointer->getDereference();
+        DLOG("Pointer found @ %p \n", m_address);
+        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
+    }
+
     
     
     uintptr_t GetAddress() {
@@ -42,6 +51,18 @@ public:
     //offset
     uintptr_t operator+(uintptr_t offset) {
         return m_address + offset;
+    }
+
+    //offset
+    template <typename T>
+    T offset (uintptr_t offset){
+        return *(T*)(m_dereferenced + offset);
+    }
+
+    //offset
+    template <typename T>
+    T ptrOffset (uintptr_t offset) {
+        return (T)(m_address + offset);
     }
 
     //assignment 
@@ -69,7 +90,7 @@ public:
     }
 
 
-private:
+protected:
     uintptr_t m_address;
     uintptr_t m_dereferenced;
 };

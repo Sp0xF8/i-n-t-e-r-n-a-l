@@ -40,7 +40,7 @@ int C_BaseEntity::getHealth(){
             throw std::exception("C_CSPlayerPawn::getPlayerHealth() - this->address == 0");
         }
         
-        return *(int*)(getDereference() + client_dll::C_BaseEntity::m_iHealth);
+        return offset<int>(client_dll::C_BaseEntity::m_iHealth);
         
     }
     catch(std::exception e){
@@ -59,7 +59,7 @@ int C_BaseEntity::getTeam(){
             throw std::exception("C_CSPlayerPawn::getTeam() - this->address == 0");
         }
         
-        return *(int*)(getDereference() + client_dll::C_BaseEntity::m_iTeamNum);
+        return offset<int>(client_dll::C_BaseEntity::m_iTeamNum);
         
     }
     catch(std::exception e){
