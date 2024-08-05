@@ -1,22 +1,22 @@
 #pragma once
 
-// #include <ClassBase.h>
-#include <Pointer.h>
+#include <ClassBase.h>
+// #include <Pointer.h>
 #include <vectors.h>
 
 
-class C_BaseEntity: public Pointer
+class C_BaseEntity: public ClassBase
 {
 
 public:
 
-    C_BaseEntity(uintptr_t address, const char* name) : Pointer(address, name) {}
+    C_BaseEntity(uintptr_t address) : ClassBase(address) {}
     //direct pointer constructro
     C_BaseEntity() {}
 
 
     int getHealth();
-    // Vector3 getPosition();
+    Vector3 getPosition();
     int getTeam();
 
 

@@ -2,11 +2,11 @@
 
 #include <cstdint>
 
-
+#include <Pointer.h>
 
 namespace CHandler
 {
-    extern uintptr_t listEntry;
+    extern Pointer* listEntry;
 	
     void setList();
 

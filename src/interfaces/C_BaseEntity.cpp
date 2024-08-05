@@ -69,27 +69,26 @@ int C_BaseEntity::getTeam(){
 
 }
 
-// Vector3 C_BaseEntity::getPosition(){
+Vector3 C_BaseEntity::getPosition(){
     
-//     try{
+    try{
 
-//         if(this == 0){
-//             throw std::exception("C_CSPlayerPawn::getBodyComponent() - this->address == 0");
-//         }
+        if(this == 0){
+            throw std::exception("C_CSPlayerPawn::getBodyComponent() - this->address == 0");
+        }
 
-//         uintptr_t CGameSceneNodeAddress = *(uintptr_t*)(getAddress() + client_dll::C_BaseEntity::m_pGameSceneNode);
-//         if(CGameSceneNodeAddress == 0){
-//             throw std::exception("C_CSPlayerPawn::getBodyComponent() - CGameSceneNodeAddress == 0");
-//         }
+        uintptr_t CGameSceneNodeAddress = offset<uintptr_t>(client_dll::C_BaseEntity::m_pGameSceneNode);
+        if(CGameSceneNodeAddress == 0){
+            throw std::exception("C_CSPlayerPawn::getBodyComponent() - CGameSceneNodeAddress == 0");
+        }
 
-//         return *(Vector3*)(CGameSceneNodeAddress + client_dll::CGameSceneNode::m_vecOrigin);
+        return *(Vector3*)(CGameSceneNodeAddress + client_dll::CGameSceneNode::m_vecOrigin);
         
         
-//     }
-//     catch(std::exception e){
-//         printf("%s\n", e.what());
-//         Vector3 FalseVec = {0,0,0};
-//         return FalseVec;
-//     }
+    }
+    catch(std::exception e){
+        printf("%s\n", e.what());
+        return {0,0,0};
+    }
 
-// }
+}

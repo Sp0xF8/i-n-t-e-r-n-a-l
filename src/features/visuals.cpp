@@ -41,21 +41,52 @@ void visuals::run(){
 		return;
 	}
 
-	C_CSPlayerPawn localPawn = gPointers.LocalPlayerPawn;
-	Pointer localController = gPointers.LocalPlayerController;
+	C_CSPlayerPawn localPawn = gPointers.LocalPlayerPawn->deref();
 
-	// int health = localPawn.getHealth();
-	// int team = localPawn.getTeam();
+	int health = localPawn.getHealth();
+	int team = localPawn.getTeam();
 
-	// DLOG("Health: %d", health);
-	// DLOG("Team: %d", team);
+	DLOG("Health: %d\n", health);
+	DLOG("Team: %d\n", team);
 
-	int health = localPawn.getDereference() + client_dll::C_BaseEntity::m_iHealth;
-	int health2 = *(int*)(localPawn.getDereference() + client_dll::C_BaseEntity::m_iHealth);
-	int health3 = localPawn.getHealth();
+	Vector3 position = localPawn.getPosition();
 
-	DLOG("Health1: %d\n", health);
-	DLOG("Health2: %d\n", health2);
-	DLOG("Health3: %d\n", health3);
+	DLOG("Position: %f %f %f\n", position.x, position.y, position.z);
+
+	CHandler::setList();
+
+
+	for (int i = 0; i < 64; i++){
+
+		CCSPlayerController entity = CHandler::GetEntityFromHandle(i);
+		if(!entity.isValid()){
+			continue;
+		}
+		DLOG("Player Controller %d @ %p \n",i, entity.getAddress());
+
+		uintptr_t pawn = entity.m_hPlayerPawn();
+		if(!pawn){
+			continue;
+		}
+		DLOG("EntityHandle: %d\n", pawn);
+
+		C_CSPlayerPawn playerPawn = CHandler::GetEntityFromHandle(pawn);
+
+		if(!playerPawn.isValid()){
+			continue;
+		}
+
+		DLOG("Player Pawn %d @ %p\n",i, playerPawn.getAddress());
+
+
+		int playerHealth = playerPawn.getHealth();
+		int playerTeam = playerPawn.getTeam();
+		Vector3 playerPos = playerPawn.getPosition();
+
+		DLOG("%d : %d\n", i, playerHealth);
+		DLOG("%d : %d\n", i, playerTeam);
+		DLOG("%d : %f %f %f\n", i, playerPos.x, playerPos.y, playerPos.z);
+
+	}
 
 }

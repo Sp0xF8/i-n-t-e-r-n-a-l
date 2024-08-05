@@ -9,89 +9,37 @@
 
 class Pointer
 {
+
 public:
+    Pointer(uintptr_t ptr, const char* name) : ptr(ptr) {
+        DLOG("%s found @ %p \n", name, ptr);
+    }
     
-    Pointer(uintptr_t address, const char* name) {
-        m_address = address;
-        m_dereferenced = *(uintptr_t*)address;
-        DLOG("%s Created @ %p\n",name, m_address);
-        DLOG("%s Value @ %p\n", name, m_dereferenced);
+    Pointer(uintptr_t ptr) : ptr(ptr) {
+        DLOG("Pointer found @ %p \n", ptr);
     }
 
-    Pointer() {}
+  
 
-    //handle C_BaseEntity(Pointer* pointer) : Pointer(pointer) {}
-    Pointer(Pointer* pointer) {
-        m_address = pointer->GetAddress();
-        m_dereferenced = pointer->getDereference();
-        DLOG("Pointer found @ %p \n", m_address);
-        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
-    }
+    Pointer() : ptr(0) {}
 
-    
-    
-    uintptr_t GetAddress() {
-        return m_address;
+    uintptr_t deref() {
+        return *(uintptr_t*)ptr;
     }
 
     template <typename T>
-    T GetAddress() {
-        return *(T*)m_address;
+    T deref(){
+        return *(T*)ptr;
     }
 
-    uintptr_t getDereference() {
-        return m_dereferenced;
-    }
-
-    template <typename T>
-    T getDereference() {
-        return (T)m_dereferenced;
-    }
-
-    //offset
-    uintptr_t operator+(uintptr_t offset) {
-        return m_address + offset;
-    }
-
-    //offset
-    template <typename T>
-    T offset (uintptr_t offset){
-        return *(T*)(m_dereferenced + offset);
-    }
-
-    //offset
-    template <typename T>
-    T ptrOffset (uintptr_t offset) {
-        return (T)(m_address + offset);
-    }
-
-    //assignment 
-    void operator=(uintptr_t address) {
-        m_address = address;
-        m_dereferenced = *(uintptr_t*)address;
-        DLOG("Pointer found @ %p \n", m_address);
-        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
-    }
-
-    // assignment via pointer
-    void operator=(Pointer* pointer) {
-        m_address = pointer->GetAddress();
-        m_dereferenced = pointer->getDereference();
-        DLOG("Pointer found @ %p \n", m_address);
-        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
-    }
-
-    // assignment via pointer
-    void operator=(Pointer pointer) {
-        m_address = pointer.GetAddress();
-        m_dereferenced = pointer.getDereference();
-        DLOG("Pointer found @ %p \n", m_address);
-        DLOG("Dereferenced Value @ %p\n", m_dereferenced);
+    template <typename T = uintptr_t>
+    T offset(uintptr_t off) {
+        return *(T*)(deref() + off);
     }
 
 
-protected:
-    uintptr_t m_address;
-    uintptr_t m_dereferenced;
+
+    uintptr_t ptr;
+
 };
 

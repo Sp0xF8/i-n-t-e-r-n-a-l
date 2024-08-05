@@ -7,13 +7,13 @@
 
 class GPointers {
 public:
-    Pointer Client_dll;
-    Pointer Engine_dll;
+    Pointer* Client_dll;
+    Pointer* Engine_dll;
 
-    Pointer EntityList;
-    Pointer LocalPlayerController;
-    Pointer LocalPlayerPawn;
-    Pointer ViewMatrix;
+    Pointer* EntityList;
+    Pointer* LocalPlayerController;
+    Pointer* LocalPlayerPawn;
+    Pointer* ViewMatrix;
 
 
 
