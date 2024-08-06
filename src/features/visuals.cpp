@@ -154,15 +154,15 @@ void visuals::run(){
 			}
 		}
 
-		// if (config::visuals::esp::name) {
+		if (config::visuals::esp::name) {
 
-		// 	uintptr_t player_name = *reinterpret_cast<uintptr_t*>(entityController + client_dll::CCSPlayerController::m_sSanitizedPlayerName);
-		// 	if(player_name){
-		// 		char buffer[256];
-		// 		sprintf(buffer, "Name: %s", (char*)player_name);
-		// 		Draw::Text(Vector2(screenPos.x, screenPos.y - 40), buffer, FromFloatToColour(config::visuals::esp::nameColour), true);
-		// 	}
-		// }
+			uintptr_t player_name = entity.m_sSanitizedPlayerName();
+			if(player_name){
+				char buffer[256];
+				sprintf(buffer, "Name: %s", (char*)player_name);
+				Draw::Text(Vector2(screenPos.x, screenPos.y - 40), buffer, FromFloatToColour(config::visuals::esp::nameColour), true);
+			}
+		}
 
 	}
 

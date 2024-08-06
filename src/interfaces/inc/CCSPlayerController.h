@@ -15,6 +15,8 @@ public:
     CCSPlayerController() : C_BaseEntity() {}
 
     int m_hPlayerPawn();
+
+    uintptr_t m_sSanitizedPlayerName();
 };
 
 
