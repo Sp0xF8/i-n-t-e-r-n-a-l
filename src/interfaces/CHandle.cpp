@@ -28,7 +28,7 @@ uintptr_t CHandler::GetEntityFromHandle(int handle) {
 		return 0;
 	}
     
-    uintptr_t entity = listEntry->offset((120) * (handle & 0x1FF));
+    uintptr_t entity = listEntry->dOffset((120) * (handle & 0x1FF));
     if(!entity){
         return 0;
     }

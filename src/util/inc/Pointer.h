@@ -32,9 +32,15 @@ public:
         return *(T*)ptr;
     }
 
+    
     template <typename T = uintptr_t>
-    T offset(uintptr_t off) {
+    T dOffset(uintptr_t off) {
         return *(T*)(deref() + off);
+    }
+
+    template <typename T = uintptr_t>
+    T offset(uintptr_t off) const {
+        return *(T*)(ptr + off);
     }
 
 

@@ -86,7 +86,7 @@ void gui::UnhookInput() {
 bool gui::CreateDevice() {
     DXGI_SWAP_CHAIN_DESC params = {};
     params.Windowed = TRUE;
-    params.BufferCount = 2;
+    params.BufferCount = 1;
     params.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     params.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     params.OutputWindow = gui::pWindow;
