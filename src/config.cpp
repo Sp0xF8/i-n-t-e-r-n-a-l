@@ -60,6 +60,8 @@ namespace config {
         bool enabled = false;
 
 		bool drawTeam = false;
+
+		bool drawSeen = false;
         namespace esp {
             bool box = false;
             float boxColour[4] = { 0.71f, 0.00f, 0.29f, 1.00f };

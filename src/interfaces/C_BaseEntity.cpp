@@ -44,7 +44,7 @@ int C_BaseEntity::getHealth(){
         
     }
     catch(std::exception e){
-        printf("%s\n", e.what());
+        DLOG("%s\n", e.what());
         return -1;
     }
 
@@ -63,7 +63,7 @@ int C_BaseEntity::getTeam(){
         
     }
     catch(std::exception e){
-        printf("%s\n", e.what());
+        DLOG("%s\n", e.what());
         return -1;
     }
 
@@ -87,7 +87,7 @@ Vector3 C_BaseEntity::getPosition(){
         
     }
     catch(std::exception e){
-        printf("%s\n", e.what());
+        DLOG("%s\n", e.what());
         return {0,0,0};
     }
 

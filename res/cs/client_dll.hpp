@@ -913,7 +913,7 @@
     // NetworkVarNames: m_materialGroup (CUtlStringToken)
     // NetworkVarNames: m_nHitboxSet (uint8)
     namespace CSkeletonInstance {
-        constexpr std::ptrdiff_t m_modelState = 0x170; // CModelState
+        constexpr std::ptrdiff_t m_modelState = 0x338; // CModelState
         constexpr std::ptrdiff_t m_bIsAnimationEnabled = 0x3A0; // bool
         constexpr std::ptrdiff_t m_bUseParentRenderBounds = 0x3A1; // bool
         constexpr std::ptrdiff_t m_bDisableSolidCollisionsForHierarchy = 0x3A2; // bool

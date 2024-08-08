@@ -21,8 +21,24 @@ namespace hooks {
 
     HRESULT __stdcall hkResizeBuffers(IDXGISwapChain* pSwapChain, UINT BufferCount, UINT Width, UINT Height, DXGI_FORMAT NewFormat, UINT SwapChainFlags);
 
+    //translate this block into the accepted state
+    // static CHook<void __fastcall(void*, int)> g_frameStageNotify;
+    // static void __fastcall hkFrameStageNotify(void* rcx, int frameStage) {
+    // skin_changer::OnFrameStageNotify(frameStage);
+    // return g_frameStageNotify(rcx, frameStage);
+    // }
+
+
+    // using frameStageNotify = void(__fastcall*)(void* rcx, int frameStage);
+    // extern frameStageNotify oFrameStageNotify;
+
+    // void __fastcall hkFrameStageNotify(void* rcx, int frameStage);
+
+
+
 
 
     void Init();
+    // void InitGameHooks();
     void Destroy();
 }

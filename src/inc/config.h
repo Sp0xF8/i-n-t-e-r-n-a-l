@@ -60,6 +60,7 @@ namespace config {
 		extern bool enabled;
 
 		extern bool drawTeam;
+		extern bool drawSeen;
 		namespace esp {
 			extern bool box;
 			extern float boxColour[4];

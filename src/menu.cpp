@@ -228,7 +228,8 @@ void menu::DrawMenu(){
 				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(MAGNIFY_SIZE(2), MAGNIFY_SIZE(4)));
                 
                 ImGui::Checkbox("Enabled", &config::visuals::enabled); SAMEL
-				ImGui::Checkbox("Draw Team", &config::visuals::drawTeam); 
+				ImGui::Checkbox("Draw Team", &config::visuals::drawTeam); SAMEL
+                ImGui::Checkbox("Draw Seen", &config::visuals::drawSeen); 
 
 				ImGui::Checkbox("Box", &config::visuals::esp::box); SAMEL
 				COLOUR_SPACING SAMEL

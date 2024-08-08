@@ -1,9 +1,10 @@
 #include <hooks.h>
 #include <config.h>
 #include <defines.h>
-#include <data.h>
+// #include <data.h>
 
 #include <framework.h>
+#include <GPointers.h>
 
 
 void* hooks::GetVFunc(void* thisptr, size_t index) {
@@ -13,6 +14,7 @@ void* hooks::GetVFunc(void* thisptr, size_t index) {
 namespace hooks {
     presentScene oPresentScene = nullptr;
     resizeBuffers oResizeBuffers = nullptr;
+    // frameStageNotify oFrameStageNotify = nullptr;
 }
 
 void hooks::Init(){
@@ -83,6 +85,14 @@ void hooks::Init(){
     #endif
 }
 
+// void hooks::InitGameHooks(){
+//     // g_frameStageNotify.setup(Interfaces::Client, 37, hkFrameStageNotify);
+//     // g_frameStageNotify.hook();
+
+
+//     MH_CreateHook(GetVFunc((HMODULE)gPointers.Client_dll->ptr, 33), &hkFrameStageNotify, reinterpret_cast<void**>(&oFrameStageNotify));
+// }
+
 
 void hooks::Destroy(){
     // Unhook input
@@ -132,3 +142,9 @@ HRESULT __stdcall hooks::hkResizeBuffers(IDXGISwapChain* pSwapChain, UINT Buffer
     MessageBoxA(nullptr, "hkResizeBuffers2", "Info", MB_OK);
     return oResizeBuffers(pSwapChain, BufferCount, Width, Height, NewFormat, SwapChainFlags);
 }
+
+// void __fastcall hooks::hkFrameStageNotify(void* rcx, int frameStage) {
+//     //skin_changer::OnFrameStageNotify(frameStage);
+//     DLOG("Staging Frame");
+//     return oFrameStageNotify(rcx, frameStage);
+// }

@@ -57,6 +57,10 @@ bool framework::Init() {
 
 	DBOX("Build Matches", "info");
 
+
+	// hooks::InitGameHooks();
+
+
 	DLOG("=======================================================\n");
 	DLOG("                     Setup Complete\n");
 	DLOG("=======================================================\n");
